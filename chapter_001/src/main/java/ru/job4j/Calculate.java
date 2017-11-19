@@ -8,6 +8,11 @@ package ru.job4j;
 
 public class Calculate {
 
+	/**
+	 * Method that prints an expression like "Echo, echo, echo...."
+	 * @param name - name to complete expression.
+	 * @return string expression.
+	 */
 	public String echo(String name) {
 		return "Echo, echo, echo : " + name;
 	}
