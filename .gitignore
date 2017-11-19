@@ -22,3 +22,8 @@
 hs_err_pid*
 
 target
+
+# IntellijIdea files
+*.iml
+.idea
+out
