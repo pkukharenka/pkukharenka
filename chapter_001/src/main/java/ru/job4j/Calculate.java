@@ -22,7 +22,7 @@ public class Calculate {
 	*@param args - array of strings.
 	*/
 	
-	public static void main (String[] args) {
+	public static void main(String[] args) {
 
 		System.out.println("Hello world.");
 	}
