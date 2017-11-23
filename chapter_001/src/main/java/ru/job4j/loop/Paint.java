@@ -34,7 +34,6 @@ public class Paint {
             sb.append("\n");
             count += 2;
         }
-        final String result = sb.toString();
-        return result;
+        return sb.toString();
     }
 }
