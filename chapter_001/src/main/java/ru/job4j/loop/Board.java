@@ -22,22 +22,21 @@ public class Board {
                 //Even rows
                 if (i % 2 == 0) {
                     if (j % 2 == 0) {
-                        sb.append("X");
+                        sb.append("X"); //even column
                     } else {
-                        sb.append(" ");
+                        sb.append(" "); //odd column
                     }
                     //Odd rows
                 } else {
                     if (j % 2 == 0) {
-                        sb.append(" ");
+                        sb.append(" "); //even column
                     } else {
-                        sb.append("X");
+                        sb.append("X"); //odd column
                     }
                 }
             }
             sb.append("\n");
         }
-        final String result = sb.toString();
-        return result;
+        return sb.toString();
     }
 }
