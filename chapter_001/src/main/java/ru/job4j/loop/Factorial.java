@@ -20,10 +20,7 @@ public class Factorial {
             for (int i = 1; i <= n; i++) {
                 result = result * i;
             }
-            return result;
-        } else if (n == 0) {
-            result = 1;
-        } else {
+        } else if (n < 0) {
             throw new ArithmeticException("Attempt to calculate the factorial of a negative number");
         }
         return result;
