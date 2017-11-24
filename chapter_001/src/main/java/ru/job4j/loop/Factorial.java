@@ -15,13 +15,12 @@ public class Factorial {
      * @return factorial n or exception.
      */
     public int calc(final int n) {
-        int result = 1;
-        if (n > 1) {
+        int result = -1;
+        if (n >= 0) {
+            result = 1;
             for (int i = 1; i <= n; i++) {
                 result = result * i;
             }
-        } else if (n < 0) {
-            throw new ArithmeticException("Attempt to calculate the factorial of a negative number");
         }
         return result;
     }

@@ -26,10 +26,11 @@ public class FactorialTest {
     /**
      * Test factorial with negative number.
      */
-    @Test(expected = ArithmeticException.class)
+    @Test
     public void whenNegativeNumberThenException() {
         Factorial fact = new Factorial();
         final int result = fact.calc(-5);
+        assertThat(result, is(-1));
     }
 
     /**
