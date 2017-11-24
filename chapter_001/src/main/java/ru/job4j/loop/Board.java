@@ -19,20 +19,10 @@ public class Board {
         StringBuffer sb = new StringBuffer();
         for (int i = 1; i <= height; i++) {
             for (int j = 1; j <= weight; j++) {
-                //Even rows
-                if (i % 2 == 0) {
-                    if (j % 2 == 0) {
-                        sb.append("X"); //even column
-                    } else {
-                        sb.append(" "); //odd column
-                    }
-                    //Odd rows
+                if ((i % 2 != 0 && j % 2 != 0) || i % 2 == 0 && j % 2 == 0) {
+                    sb.append("X");
                 } else {
-                    if (j % 2 == 0) {
-                        sb.append(" "); //even column
-                    } else {
-                        sb.append("X"); //odd column
-                    }
+                    sb.append(" ");
                 }
             }
             sb.append("\n");
