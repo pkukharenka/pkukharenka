@@ -18,7 +18,6 @@ public class StringContain {
      */
     public boolean contains(final String origin, final String sub) {
         boolean result = false;
-        int count = 0;
         char[] originArr = origin.toCharArray();
         char[] subArr = sub.toCharArray();
         char first = subArr[0];
