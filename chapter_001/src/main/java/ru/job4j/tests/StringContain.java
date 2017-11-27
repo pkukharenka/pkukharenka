@@ -17,27 +17,22 @@ public class StringContain {
      * @return result.
      */
     public boolean contains(final String origin, final String sub) {
-        boolean result = false;
-        char[] originArr = origin.toCharArray();
-        char[] subArr = sub.toCharArray();
-        char first = subArr[0];
-        for (int i = 0; i < originArr.length; i++) {
-            if (originArr[i] == first) {
-                int j = i + 1; //номер символа после первого найденного.
-                int end = j + subArr.length - 1; //номер потенциально последнего символа искомой строки в оригинальной
-                for (int k = 1; j < end; k++) {
-                    if (originArr[j] == subArr[k]) {
-                        j++;
-                    }
-                }
-                //Переменная j будет увеличиваться каждый раз, когда символ искомой строки будет совпадать с символом
-                //оригинальной. Если все символы подряд совпадут, то j == end -->> искомая строка найдена.
-                if (j == end) {
-                    result = true;
+        boolean flag = false;
+        char[] outer = origin.toCharArray();
+        char[] inner = sub.toCharArray();
+        for (int out = 0; out < outer.length; out++) {
+            int count = 0;
+            for (int in = 0; in < inner.length; in++) {
+                if ((out + in) < outer.length && outer[out + in] == inner[in]) {
+                    count++;
                 }
             }
+            if (count == inner.length) {
+                flag = true;
+                break;
+            }
         }
-        return result;
+        return flag;
     }
 
 }
