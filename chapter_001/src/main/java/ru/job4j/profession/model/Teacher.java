@@ -1,6 +1,6 @@
-package ru.job4j.profession;
+package ru.job4j.profession.model;
 
-import java.util.ArrayList;
+import ru.job4j.profession.Profession;
 
 /**
  * Class that describe simple teacher.
@@ -11,6 +11,17 @@ import java.util.ArrayList;
 
 public class Teacher extends Profession {
     private String degree;
+
+    /**
+     * Base constructor.
+     *
+     * @param name    - person name.
+     * @param surname - person surname.
+     */
+    public Teacher(String name, String surname) {
+        super(name, surname);
+    }
+
 
     /**
      * Teach student.

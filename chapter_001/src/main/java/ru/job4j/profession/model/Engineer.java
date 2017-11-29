@@ -1,4 +1,6 @@
-package ru.job4j.profession;
+package ru.job4j.profession.model;
+
+import ru.job4j.profession.Profession;
 
 /**
  * Class that describe engineer.
@@ -8,6 +10,17 @@ package ru.job4j.profession;
  */
 
 public class Engineer extends Profession {
+
+
+    /**
+     * Base constructor.
+     *
+     * @param name    - person name.
+     * @param surname - person surname.
+     */
+    public Engineer(String name, String surname) {
+        super(name, surname);
+    }
 
     /**
      * Engineer create something with simple worker.

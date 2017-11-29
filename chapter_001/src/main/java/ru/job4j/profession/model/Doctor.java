@@ -1,4 +1,6 @@
-package ru.job4j.profession;
+package ru.job4j.profession.model;
+
+import ru.job4j.profession.Profession;
 
 /**
  * Class that create simple doctor
@@ -9,6 +11,18 @@ package ru.job4j.profession;
 
 public class Doctor extends Profession {
     private String degree;
+
+    /**
+     * Base constructor.
+     *
+     * @param name    - person name.
+     * @param surname - person surname.
+     */
+    public Doctor(String name, String surname) {
+        super(name, surname);
+    }
+
+
 
     /**
      * Heal pacient.
