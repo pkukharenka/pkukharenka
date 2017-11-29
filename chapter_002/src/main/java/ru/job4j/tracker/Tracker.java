@@ -35,9 +35,9 @@ public class Tracker {
      * @param item - обновленный объект.
      */
     public void update(Item item) {
-        for (Item value : this.items) {
-            if (value.getId().equals(item.getId())) {
-                this.items[this.positionSearch(value)] = item;
+        for (int index = 0; index < this.items.length; index++) {
+            if (this.items[index].getId().equals(item.getId())) {
+                this.items[index] = item;
                 break;
             }
         }
