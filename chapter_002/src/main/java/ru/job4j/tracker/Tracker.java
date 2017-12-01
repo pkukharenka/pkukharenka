@@ -108,7 +108,7 @@ public class Tracker {
      * @return уникальный Id.
      */
     private String generatedId() {
-        return String.valueOf(System.currentTimeMillis() * (RN.nextInt(100) + 1));
+        return String.valueOf(System.currentTimeMillis() * (RN.nextInt(5) + 1));
     }
 
     /**

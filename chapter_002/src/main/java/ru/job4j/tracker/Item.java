@@ -62,5 +62,11 @@ public class Item {
         this.comments = comments;
     }
 
-
+    @Override
+    public String toString() {
+        return "id='" + id + '\''
+                + ", имя='" + name + '\''
+                + ", описание='" + desc + '\''
+                + '}';
+    }
 }
