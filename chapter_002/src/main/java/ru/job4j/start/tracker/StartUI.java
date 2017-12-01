@@ -1,6 +1,4 @@
-package ru.job4j.tracker;
-
-import java.util.Calendar;
+package ru.job4j.start.tracker;
 
 /**
  * Класс содержит в себе методы для взаимодействия с пользователем.

@@ -1,4 +1,4 @@
-package ru.job4j.tracker;
+package ru.job4j.start.tracker;
 
 /**
  * Базовый интерфейс для системы ввода/вывода программы tracker.
