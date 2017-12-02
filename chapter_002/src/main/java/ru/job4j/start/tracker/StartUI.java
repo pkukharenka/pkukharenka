@@ -107,7 +107,7 @@ public class StartUI {
      */
     private void createItem() {
         System.out.println("***********Добавление новой заявки:***********");
-        String name = this.input.ask("Введите имя заявки: ");
+        String name = this.input.ask("Введите имя автора заявки: ");
         String desc = this.input.ask("Введите описание заявки: ");
         Item item = new Item(name, desc, System.currentTimeMillis());
         tracker.add(item);
@@ -138,7 +138,7 @@ public class StartUI {
         String id = this.input.ask("***********Укажите ID заявки для редактирования:*********** ");
         Item item = tracker.findById(id);
         System.out.println("Редактирование заявки с ID " + id);
-        String name = this.input.ask("Введите новое имя заявки");
+        String name = this.input.ask("Введите нового автора заявки");
         String desc = this.input.ask("Введите новое описание заявки");
         item.setName(name);
         item.setDesc(desc);
@@ -169,7 +169,7 @@ public class StartUI {
         Item item = tracker.findById(id);
         if (item != null) {
             System.out.println("Заявка с ID " + item.getId() + " найдена.\n"
-                    + "Имя заявки: " + item.getName()
+                    + "Имя автора заявки: " + item.getName()
                     + "\nОписание заявки: " + item.getDesc());
         } else {
             System.out.println("***********Заявка с ID " + id + " не найдена.***********");
@@ -180,9 +180,10 @@ public class StartUI {
      * Взаимодействие с пользователем при поиске заявки по имени.
      */
     private void searchItemByName() {
-        String key = this.input.ask("***********Укажите имя заявки для поиска: ***********");
+        String key = this.input.ask("***********Укажите имя автора заявки для поиска: ***********");
         Item[] items = tracker.findByName(key);
         if (items.length != 0) {
+            System.out.println("***********Заявки автора " + key + ".***********");
             for (Item item : items) {
                 System.out.println(item);
             }
