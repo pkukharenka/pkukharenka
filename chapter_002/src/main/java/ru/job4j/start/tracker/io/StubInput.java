@@ -1,4 +1,4 @@
-package ru.job4j.start.tracker;
+package ru.job4j.start.tracker.io;
 
 /**
  * @author Pyotr Kukharenka
@@ -14,7 +14,7 @@ public class StubInput implements Input {
 
     @Override
     public String ask(String question) {
-        return this.answers[position++];
+        return this.answers[this.position++];
     }
 
 }

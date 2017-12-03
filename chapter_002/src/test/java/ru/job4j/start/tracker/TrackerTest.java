@@ -1,6 +1,7 @@
 package ru.job4j.start.tracker;
 
 import org.junit.Test;
+import ru.job4j.start.tracker.models.Item;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
 public class TrackerTest {
     private static final Item FIRST = new Item("test1", "testDescription", 123L);
     private static final Item SECOND = new Item("test2", "testDescription2", 1234L);
+    private static final Item THIRD = new Item("test3", "testDescription3", 12234L);
 
     /**
      * Тест добавления нового объекта.
@@ -46,8 +48,9 @@ public class TrackerTest {
         Tracker tracker = new Tracker();
         tracker.add(FIRST);
         tracker.add(SECOND);
-        tracker.delete(FIRST);
-        assertNull(tracker.findAll()[0]);
+        tracker.add(THIRD);
+        tracker.delete(SECOND);
+        assertThat(tracker.findAll()[1].getName(), is("test3"));
     }
 
     /**

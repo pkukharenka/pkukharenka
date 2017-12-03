@@ -1,4 +1,4 @@
-package ru.job4j.start.tracker;
+package ru.job4j.start.tracker.models;
 
 /**
  * Класс, описывающий объект типа Item.

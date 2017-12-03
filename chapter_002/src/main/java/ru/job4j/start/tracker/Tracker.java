@@ -1,5 +1,7 @@
 package ru.job4j.start.tracker;
 
+import ru.job4j.start.tracker.models.Item;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -12,7 +14,7 @@ import java.util.Random;
  */
 
 public class Tracker {
-    private Item[] items = new Item[100];
+    private Item[] items = new Item[5];
     private int position = 0;
     private static final Random RN = new Random();
 
@@ -36,7 +38,7 @@ public class Tracker {
      */
     public void update(Item item) {
         for (int index = 0; index < this.items.length; index++) {
-            if (this.items[index].getId().equals(item.getId())) {
+            if (this.items[index] != null && this.items[index].getId().equals(item.getId())) {
                 this.items[index] = item;
                 break;
             }
@@ -51,7 +53,7 @@ public class Tracker {
      */
     public void delete(Item item) {
         int index = this.positionSearch(item);
-        this.items[index] = null;
+        System.arraycopy(this.items, index + 1, this.items, index, this.items.length - index - 1);
     }
 
     /**
@@ -81,7 +83,7 @@ public class Tracker {
             }
         }
 
-        return values;
+        return Arrays.copyOf(values, count);
     }
 
     /**
@@ -93,7 +95,7 @@ public class Tracker {
     public Item findById(String id) {
         Item result = null;
         for (Item item : this.items) {
-            if (item.getId().equals(id)) {
+            if (item != null && item.getId().equals(id)) {
                 result = item;
                 break;
             }
@@ -108,7 +110,7 @@ public class Tracker {
      * @return уникальный Id.
      */
     private String generatedId() {
-        return String.valueOf(System.currentTimeMillis() * (RN.nextInt(5) + 1));
+        return String.valueOf(this.position);
     }
 
     /**

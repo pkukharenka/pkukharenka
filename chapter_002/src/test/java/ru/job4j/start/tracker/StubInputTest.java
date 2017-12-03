@@ -1,6 +1,9 @@
 package ru.job4j.start.tracker;
 
 import org.junit.Test;
+import ru.job4j.start.tracker.io.Input;
+import ru.job4j.start.tracker.io.StubInput;
+import ru.job4j.start.tracker.models.Item;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -18,6 +21,7 @@ public class StubInputTest {
      */
     private static final Item FIRST = new Item("test1", "testDescription", 123L);
     private static final Item SECOND = new Item("test2", "testDescription2", 1234L);
+    private static final Item THIRD = new Item("test3", "testDescription3", 122234L);
 
     /**
      * Тестирование добавления новой заявки.
@@ -25,21 +29,25 @@ public class StubInputTest {
     @Test
     public void whenAddNewItemThenName() {
         Tracker tracker = new Tracker();
-        Input input = new StubInput(new String[]{"1", "name1", "desc1", "7"});
+        Input input = new StubInput(new String[]{"0", "name1", "desc1", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll()[0].getName(), is("name1"));
     }
 
     /**
      * Тестирование обновления существующей заявки по ID.
-     * Добавляем новую заявку, находим ее по ID и меняем имя автора
-     * и опсание. Сравниваем имя автора заявки.
+     * Добавляем две заявки, первую удаляем. Находим вторую заявку по ID и меняем имя автора
+     * и опсание. Сравниваем имя автора заявки под индексом 0.
      */
     @Test
-    public void whenUpdateItemThenItemHasNewName() {
+    public void whenDeleteFirstItemAndUpdateSecondThenItemHasNewName() {
         Tracker tracker = new Tracker();
-        Item item = tracker.add(FIRST);
-        Input input = new StubInput(new String[]{"3", item.getId(), "name2", "desc2", "2", "7"});
+        Item item1 = tracker.add(FIRST);
+        Item item2 = tracker.add(SECOND);
+        tracker.delete(item1);
+        Input input = new StubInput(new String[]{"2", item2.getId(), "name2", "desc2", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll()[0].getName(), is("name2"));
     }
@@ -54,24 +62,26 @@ public class StubInputTest {
         Tracker tracker = new Tracker();
         tracker.add(FIRST);
         tracker.add(SECOND);
-        Input input = new StubInput(new String[]{"2", "7"});
+        Input input = new StubInput(new String[]{"1", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll().length, is(2));
     }
 
     /**
      * Тестирование удаления заявки. Добавляем две заявки
-     * Удаляем заявку по ID. Проверяем, что заявка по этим индексом
-     * равна null.
+     * Удаляем заявку первую добавленную заявку. Проверяем, что имя заявка по индексом 0
+     * равна имени второй заявки.
      */
     @Test
     public void whenAddTwoItemsAndDeleteOneThenLenghtOne() {
         Tracker tracker = new Tracker();
         Item item1 = tracker.add(FIRST);
-        Item item2 = tracker.add(SECOND);
-        Input input = new StubInput(new String[]{"4", item1.getId(), "yes", "2", "7"});
+        tracker.add(SECOND);
+        Input input = new StubInput(new String[]{"3", item1.getId(), "yes", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertNull(tracker.findAll()[0]);
+        assertThat(tracker.findAll()[0].getName(), is("test2"));
     }
 
     /**
@@ -82,25 +92,29 @@ public class StubInputTest {
     public void whenFindByIdThenItemHasSameName() {
         Tracker tracker = new Tracker();
         Item item = tracker.add(FIRST);
-        Input input = new StubInput(new String[]{"5", item.getId(), "7"});
+        Input input = new StubInput(new String[]{"4", item.getId(), "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findById(item.getId()).getName(), is("test1"));
     }
 
     /**
      * Тестирование поиска авторов заявок по имени.
-     * Добавляем две заявки, по ключу производим поиск.
+     * Добавляем две заявки, первую удаляем и добавляем еще одну заявку.
+     * Производми поис по ключу key.
      * Длина найденного массива длолжна соответствовать
      * количеству заявок с ключом.
      */
     @Test
     public void whenFindByNameTestThenArrayLenghtTwo() {
         Tracker tracker = new Tracker();
-        Item item1 = tracker.add(FIRST);
-        Item item2 = tracker.add(SECOND);
+        tracker.add(FIRST);
+        tracker.add(THIRD);
+        tracker.delete(FIRST);
         String key = "test";
-        Input input = new StubInput(new String[]{"6", key, "7"});
+        Input input = new StubInput(new String[]{"5", key, "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findByName(key).length, is(2));
+        assertThat(tracker.findByName(key).length, is(1));
     }
 }
