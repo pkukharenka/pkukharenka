@@ -13,6 +13,10 @@ import ru.job4j.start.tracker.models.Item;
 
 public class MenuTracker {
     /**
+     * Диапозон возможных чисел, при которых трекер будет функционировать
+     */
+    private int[] range;
+    /**
      * Система ввода/вывода.
      */
     private Input input;
@@ -37,7 +41,8 @@ public class MenuTracker {
     }
 
     /**
-     * Метод, инициализирующий массив с действиями трекера.
+     * Метод, инициализирующий массив с действиями трекера и массив возможных
+     * выборов пользователя.
      */
     public void fill() {
         this.actions[0] = new AddItem();
@@ -47,6 +52,10 @@ public class MenuTracker {
         this.actions[4] = new MenuTracker.FindById();
         this.actions[5] = new FindByName();
         this.actions[6] = new Exit();
+        this.range = new int[this.actions.length];
+        for (int index = 0; index < this.range.length; index++) {
+            this.range[index] = index;
+        }
     }
 
     /**
@@ -58,7 +67,7 @@ public class MenuTracker {
      */
     public boolean select() {
         boolean flag = false;
-        Integer key = Integer.valueOf(this.input.ask("Выберите действие: "));
+        Integer key = this.input.ask("Выберите действие: ", this.range);
         if (!key.equals(this.actions.length - 1)) {
             this.actions[key].execute(this.input, this.tracker);
         } else {

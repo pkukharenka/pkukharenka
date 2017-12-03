@@ -1,6 +1,7 @@
 package ru.job4j.start.tracker;
 
 import org.junit.Test;
+import ru.job4j.start.tracker.exception.MenuOutException;
 import ru.job4j.start.tracker.io.Input;
 import ru.job4j.start.tracker.io.StubInput;
 import ru.job4j.start.tracker.models.Item;
@@ -116,5 +117,31 @@ public class StubInputTest {
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findByName(key).length, is(1));
+    }
+
+    /**
+     * Тест ввода буквы вместо целочисленного значения. Программа
+     * не падает.
+     */
+    @Test
+    public void whenSelectNonIntAndAddItemThenName() {
+        Tracker tracker = new Tracker();
+        Input input = new StubInput(new String[]{"f", "0", "name2", "desc2", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
+        new StartUI(input, tracker).init();
+        assertThat(tracker.findAll()[0].getName(), is("name2"));
+    }
+    /**
+     * Тест ввода значения не входящего в диапозон работы. Программа
+     * не падает.
+     */
+    @Test
+    public void whenSelectNonRangeKeyAndAddItemThenName() {
+        Tracker tracker = new Tracker();
+        tracker.add(FIRST);
+        Input input = new StubInput(new String[]{"1111", "1", "6"});
+        MenuTracker menu = new MenuTracker(input, tracker);
+        new StartUI(input, tracker).init();
+        assertThat(tracker.findAll().length, is(1));
     }
 }

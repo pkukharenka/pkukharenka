@@ -1,7 +1,7 @@
 package ru.job4j.start.tracker;
 
-import ru.job4j.start.tracker.io.ConsoleInput;
 import ru.job4j.start.tracker.io.Input;
+import ru.job4j.start.tracker.io.ValidateInput;
 
 /**
  * Класс содержит в себе методы для взаимодействия с пользователем.
@@ -33,7 +33,9 @@ public class StartUI {
     }
 
     /**
-     * Основной цикл программы.
+     * Основной цикл программы. Производится наполнение меню
+     * программы значениями возможных функций, а также вывод
+     * меню в консоль и запрос у пользователя выбора действия.
      */
     public void init() {
         boolean flag = false;
@@ -49,6 +51,6 @@ public class StartUI {
      * Запуск программы.
      */
     public static void main(String[] args) {
-        new StartUI(new ConsoleInput(), new Tracker()).init();
+        new StartUI(new ValidateInput(), new Tracker()).init();
     }
 }
