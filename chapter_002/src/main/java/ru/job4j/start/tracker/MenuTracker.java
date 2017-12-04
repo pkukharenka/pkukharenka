@@ -1,5 +1,6 @@
 package ru.job4j.start.tracker;
 
+import ru.job4j.start.BaseAction;
 import ru.job4j.start.tracker.io.Input;
 import ru.job4j.start.tracker.models.Item;
 
@@ -45,13 +46,13 @@ public class MenuTracker {
      * выборов пользователя.
      */
     public void fill() {
-        this.actions[0] = new AddItem();
-        this.actions[1] = new ShowItems();
-        this.actions[2] = new UpdateItem();
-        this.actions[3] = new MenuTracker.DeleteItem();
-        this.actions[4] = new MenuTracker.FindById();
-        this.actions[5] = new FindByName();
-        this.actions[6] = new Exit();
+        this.actions[0] = this.new AddItem(0, "Добавление новой заявки.");
+        this.actions[1] = this.new ShowItems(1, "Показать все заявки заявки.");
+        this.actions[2] = this.new UpdateItem(2, "Редактировать заявку.");
+        this.actions[3] = new MenuTracker.DeleteItem(3, "Удалить заявку.");
+        this.actions[4] = new MenuTracker.FindById(4, "Поиск заявки по Id.");
+        this.actions[5] = new FindByName(5, "Поиск заявок по имени.");
+        this.actions[6] = this.new Exit(6, "Выход.");
         this.range = new int[this.actions.length];
         for (int index = 0; index < this.range.length; index++) {
             this.range[index] = index;
@@ -88,15 +89,15 @@ public class MenuTracker {
     /**
      * Класс, описывающий создание новой заявки в трекере.
      */
-    private class AddItem implements UserAction {
+    private class AddItem extends BaseAction {
         /**
-         * Ключ для добавления новой заявки.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 0;
+        public AddItem(int key, String name) {
+            super(key, name);
         }
 
         /**
@@ -114,27 +115,20 @@ public class MenuTracker {
             tracker.add(item);
             System.out.println("Выполнено успешно.");
         }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Добавление новой заявки.");
-        }
     }
 
-    private class ShowItems implements UserAction {
+    /**
+     * Класс, описывающий отображение всех заявок в трекере.
+     */
+    private class ShowItems extends BaseAction {
         /**
-         * Ключ для отображения всех заявок.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 1;
+        public ShowItems(int key, String name) {
+            super(key, name);
         }
 
         /**
@@ -154,29 +148,21 @@ public class MenuTracker {
             } else {
                 System.out.println("***********На данный момент заявок нет.***********");
             }
-
-        }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Показать все заявки.");
         }
     }
 
-    private class UpdateItem implements UserAction {
+    /**
+     * Класс, описывающий редактирование заявки в трекере.
+     */
+    private class UpdateItem extends BaseAction {
         /**
-         * Ключ для обновления заявки.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 2;
+        public UpdateItem(int key, String name) {
+            super(key, name);
         }
 
         /**
@@ -188,7 +174,7 @@ public class MenuTracker {
          */
         @Override
         public void execute(Input input, Tracker tracker) {
-            new ShowItems().execute(input, tracker);
+            new ShowItems(1, "Показать все заявки заявки.").execute(input, tracker);
             String id = input.ask("***********Укажите ID заявки для редактирования:*********** ");
             Item item = tracker.findById(id);
             System.out.println("Редактирование заявки с ID " + id);
@@ -199,27 +185,20 @@ public class MenuTracker {
             tracker.update(item);
             System.out.println("Выполнено успешно.");
         }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Редактировать заявку.");
-        }
     }
 
-    private static class FindById implements UserAction {
+    /**
+     * Статический класс, описывающий поиск заявки по ID в трекере.
+     */
+    private static class FindById extends BaseAction {
         /**
-         * Ключ для поиска заявки по Id.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 4;
+        public FindById(int key, String name) {
+            super(key, name);
         }
 
         /**
@@ -241,54 +220,40 @@ public class MenuTracker {
                 System.out.println("***********Заявка с ID " + id + " не найдена.***********");
             }
         }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Поиск заявки по ID номеру.");
-        }
     }
 
-    private class Exit implements UserAction {
+    /**
+     * Класс, описывающий выход из трекера.
+     */
+    private class Exit extends BaseAction {
         /**
-         * Ключ для выхода из программы трекер.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 6;
+        public Exit(int key, String name) {
+            super(key, name);
         }
 
         @Override
         public void execute(Input input, Tracker tracker) {
 
         }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Выйти из программы.");
-        }
     }
 
-    private class DeleteItem implements UserAction {
+    /**
+     * Класс, описывающий удаление заявки из трекера.
+     */
+    private class DeleteItem extends BaseAction {
         /**
-         * Ключ для удаления заявки.
+         * Конструктор.
          *
-         * @return значение ключа.
+         * @param key  - ключ меню.
+         * @param name - имя пункта меню.
          */
-        @Override
-        public int key() {
-            return 3;
+        public DeleteItem(int key, String name) {
+            super(key, name);
         }
 
         /**
@@ -300,7 +265,7 @@ public class MenuTracker {
          */
         @Override
         public void execute(Input input, Tracker tracker) {
-            new MenuTracker.ShowItems().execute(input, tracker);
+            new MenuTracker.ShowItems(1, "Показать все заявки заявки.").execute(input, tracker);
             String id = input.ask("***********Укажите ID заявки для удаления: ***********");
             Item item = tracker.findById(id);
             String answer = input.ask("Вы уверены что хотите удалить заявку с ID " + id + "[yes/no]");
@@ -309,29 +274,21 @@ public class MenuTracker {
                 System.out.println("***********Заявка с ID " + item.getId() + " успешно удалена.***********");
             }
         }
-
-        /**
-         * Метод возвращает информацию о действии трекера.
-         *
-         * @return - информация о действии.
-         */
-        @Override
-        public String info() {
-            return String.format("%s. %s", key(), "Удалить заявку.");
-        }
     }
 }
 
-
-class FindByName implements UserAction {
+/**
+ * Класс, описывающий поиск заявок по имени в трекере.
+ */
+class FindByName extends BaseAction {
     /**
-     * Ключ для поиска заявок по имени автора.
+     * Конструктор.
      *
-     * @return значение ключа.
+     * @param key  - ключ меню.
+     * @param name - имя пункта меню.
      */
-    @Override
-    public int key() {
-        return 5;
+    public FindByName(int key, String name) {
+        super(key, name);
     }
 
     /**
@@ -353,15 +310,5 @@ class FindByName implements UserAction {
         } else {
             System.out.println("***********Заявки с именем " + key + " не найдены.***********");
         }
-    }
-
-    /**
-     * Метод возвращает информацию о действии трекера.
-     *
-     * @return - информация о действии.
-     */
-    @Override
-    public String info() {
-        return String.format("%s. %s", key(), "Поиск заявок по имени автора.");
     }
 }
