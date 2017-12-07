@@ -47,6 +47,8 @@ public class Board {
             figure = this.checkFigure(source);
             this.checkOccupied(figure.way(source, dest));
             figure.clone(dest);
+            this.figures[dest.getY() - 1][dest.getX() - 1] = figure;
+            this.figures[source.getY() - 1][source.getX() - 1] = null;
             flag = true;
         } catch (FigureNotFoundException fnfe) {
             System.err.println("В указанной ячейке нет фигуры, попробуйте выбрать другую ячейку.");

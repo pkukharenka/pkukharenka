@@ -28,14 +28,18 @@ public class Elephant extends Figure {
      * @param dest   - ячейка назначения.
      * @return - массив ячеек.
      * @throws ImpossibleMoveException- выбрасывается в случая когда фигура не может
-     *                                 ходить таким образом по правилам игры
+     *                                  ходить таким образом по правилам игры
      */
     @Override
     Cell[] way(Cell source, Cell dest) throws ImpossibleMoveException {
         if (this.checkWay(source, dest)) {
-            Cell[] cells = new Cell[dest.getX() - source.getX()];
+            Cell[] cells = new Cell[this.cellSize(source, dest)];
             for (int index = 0; index < cells.length; index++) {
-                cells[index] = new Cell(source.getX() + 1 + index, source.getY() + 1 + index);
+                if (source.getX() < dest.getX() || source.getY() < dest.getY()) {
+                    cells[index] = new Cell(source.getX() + 1+ index, source.getY() + 1+ index);
+                } else {
+                    cells[index] = new Cell(source.getX() - 1 - index, source.getY() - 1 - index);
+                }
             }
             return cells;
         } else {
@@ -52,7 +56,7 @@ public class Elephant extends Figure {
      * движение валидно.
      *
      * @param source - начальная точка фигуры.
-     * @param dest - конечная точка фигуры.
+     * @param dest   - конечная точка фигуры.
      * @return - возвращает true если условие удовлетворено.
      */
     private boolean checkWay(Cell source, Cell dest) {
@@ -63,5 +67,9 @@ public class Elephant extends Figure {
             flag = true;
         }
         return flag;
+    }
+
+    private int cellSize(Cell source, Cell dest) {
+        return ((int) Math.sqrt(Math.pow(dest.getX() - source.getX(), 2)));
     }
 }
