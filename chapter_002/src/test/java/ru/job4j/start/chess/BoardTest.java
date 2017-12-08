@@ -25,7 +25,9 @@ public class BoardTest {
         board.init();
         Cell source = new Cell(3, 1);
         Cell dest = new Cell(6, 4);
+        //перемещение фигуры из ячейки 3-1 в ячейку 6-4
         board.move(source, dest);
+        //перемещение фигуры из ячейки 6-4 в ячейку 4-2
         assertThat(board.move(new Cell(6, 4), new Cell(4, 2)), is(true));
     }
 
