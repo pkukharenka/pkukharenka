@@ -1,5 +1,7 @@
 package ru.job4j.start.tracker.models;
 
+import java.util.Arrays;
+
 /**
  * Класс, описывающий объект типа Item.
  *
@@ -8,7 +10,7 @@ package ru.job4j.start.tracker.models;
  */
 
 public class Item {
-    private String id;
+    private int id;
     private String name;
     private String desc;
     private long created;
@@ -20,11 +22,11 @@ public class Item {
         this.created = created;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -58,6 +60,31 @@ public class Item {
 
     public void setComments(String[] comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (id != item.id) return false;
+        if (created != item.created) return false;
+        if (name != null ? !name.equals(item.name) : item.name != null) return false;
+        if (desc != null ? !desc.equals(item.desc) : item.desc != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(comments, item.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (desc != null ? desc.hashCode() : 0);
+        result = 31 * result + (int) (created ^ (created >>> 32));
+        result = 31 * result + Arrays.hashCode(comments);
+        return result;
     }
 
     @Override

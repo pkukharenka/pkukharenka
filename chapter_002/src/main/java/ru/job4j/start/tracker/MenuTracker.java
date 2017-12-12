@@ -3,6 +3,9 @@ package ru.job4j.start.tracker;
 import ru.job4j.start.tracker.io.Input;
 import ru.job4j.start.tracker.models.Item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Класс описывающий основные действия трекера, формирующий меню и
  * отрабатывающий взаимодейтсиве с пользователем.
@@ -15,7 +18,7 @@ public class MenuTracker {
     /**
      * Диапозон возможных чисел, при которых трекер будет функционировать
      */
-    private int[] range;
+    private int range;
     /**
      * Система ввода/вывода.
      */
@@ -27,7 +30,7 @@ public class MenuTracker {
     /**
      * Хранилище действия программы трекер.
      */
-    private UserAction[] actions = new UserAction[7];
+    private List<UserAction> actions = new ArrayList<>();
 
     /**
      * Конструктор для инициализации меню трекера.
@@ -45,17 +48,15 @@ public class MenuTracker {
      * выборов пользователя.
      */
     public void fill() {
-        this.actions[0] = this.new AddItem(0, "Добавление новой заявки.");
-        this.actions[1] = this.new ShowItems(1, "Показать все заявки заявки.");
-        this.actions[2] = this.new UpdateItem(2, "Редактировать заявку.");
-        this.actions[3] = new MenuTracker.DeleteItem(3, "Удалить заявку.");
-        this.actions[4] = new MenuTracker.FindById(4, "Поиск заявки по Id.");
-        this.actions[5] = new FindByName(5, "Поиск заявок по имени.");
-        this.actions[6] = this.new Exit(6, "Выход.");
-        this.range = new int[this.actions.length];
-        for (int index = 0; index < this.range.length; index++) {
-            this.range[index] = index;
-        }
+        this.actions.add(new AddItem(0, "Добавление новой заявки."));
+        this.actions.add(new ShowItems(1, "Показать все заявки заявки."));
+        this.actions.add(this.new UpdateItem(2, "Редактировать заявку."));
+        this.actions.add(new MenuTracker.DeleteItem(3, "Удалить заявку."));
+        this.actions.add(new MenuTracker.FindById(4, "Поиск заявки по Id."));
+        this.actions.add(new FindByName(5, "Поиск заявок по имени."));
+        this.actions.add(this.new Exit(6, "Выход."));
+        this.range = this.actions.size();
+
     }
 
     /**
@@ -68,8 +69,8 @@ public class MenuTracker {
     public boolean select() {
         boolean flag = false;
         Integer key = this.input.ask("Выберите действие: ", this.range);
-        if (!key.equals(this.actions.length - 1)) {
-            this.actions[key].execute(this.input, this.tracker);
+        if (key != this.actions.size() - 1) {
+            this.actions.get(key).execute(this.input, this.tracker);
         } else {
             flag = true;
         }
@@ -132,15 +133,16 @@ public class MenuTracker {
 
         /**
          * Метод, осуществляющий взаимодействие с пользователем по
-         * выводу всех заявок трекера.
+         * выводу всех заявок трекера. В случае если заявки отсутствуют
+         * выводится сообщение.
          *
          * @param input   - ввод/вывод.
          * @param tracker - хранилище заявок
          */
         @Override
         public void execute(Input input, Tracker tracker) {
-            Item[] items = tracker.findAll();
-            if (items.length != 0) {
+            List<Item> items = tracker.findAll();
+            if (items.size() != 0) {
                 for (Item item : items) {
                     System.out.println(item);
                 }
@@ -174,7 +176,7 @@ public class MenuTracker {
         @Override
         public void execute(Input input, Tracker tracker) {
             new ShowItems(1, "Показать все заявки заявки.").execute(input, tracker);
-            String id = input.ask("***********Укажите ID заявки для редактирования:*********** ");
+            int id = Integer.parseInt(input.ask("***********Укажите ID заявки для редактирования:*********** "));
             Item item = tracker.findById(id);
             System.out.println("Редактирование заявки с ID " + id);
             String name = input.ask("Введите нового автора заявки");
@@ -209,14 +211,13 @@ public class MenuTracker {
          */
         @Override
         public void execute(Input input, Tracker tracker) {
-            String id = input.ask("***********Укажите ID заявки для поиска: ***********");
+            int id = Integer.parseInt(input.ask("***********Укажите ID заявки для поиска: ***********"));
             Item item = tracker.findById(id);
             if (item != null) {
-                System.out.println("Заявка с ID " + item.getId() + " найдена.\n"
-                        + "Имя автора заявки: " + item.getName()
-                        + "\nОписание заявки: " + item.getDesc());
+                System.out.println(String.format("Заявка с ID %s найдена.\n Имя автора заявки: %s\nОписание заявки: &s", item.getId(),
+                        item.getName(), item.getDesc()));
             } else {
-                System.out.println("***********Заявка с ID " + id + " не найдена.***********");
+                System.out.println(String.format("***********Заявка с ID %s не найдена.***********", id));
             }
         }
     }
@@ -265,7 +266,7 @@ public class MenuTracker {
         @Override
         public void execute(Input input, Tracker tracker) {
             new MenuTracker.ShowItems(1, "Показать все заявки заявки.").execute(input, tracker);
-            String id = input.ask("***********Укажите ID заявки для удаления: ***********");
+            int id = Integer.parseInt(input.ask("***********Укажите ID заявки для удаления: ***********"));
             Item item = tracker.findById(id);
             String answer = input.ask("Вы уверены что хотите удалить заявку с ID " + id + "[yes/no]");
             if (answer.equals("yes")) {
@@ -300,8 +301,8 @@ class FindByName extends BaseAction {
     @Override
     public void execute(Input input, Tracker tracker) {
         String key = input.ask("***********Укажите имя автора заявки для поиска: ***********");
-        Item[] items = tracker.findByName(key);
-        if (items.length != 0) {
+        List<Item> items = tracker.findByName(key);
+        if (items.size() != 0) {
             System.out.println("***********Заявки автора " + key + ".***********");
             for (Item item : items) {
                 System.out.println(item);

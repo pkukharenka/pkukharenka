@@ -2,7 +2,9 @@ package ru.job4j.start.tracker;
 
 import ru.job4j.start.tracker.models.Item;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,9 +16,8 @@ import java.util.Random;
  */
 
 public class Tracker {
-    private Item[] items = new Item[100];
-    private int position = 0;
-    private static final Random RN = new Random();
+    private List<Item> items = new ArrayList<>();
+    private int id = 1;
 
     /**
      * Метод добавления нового объекта в массив.
@@ -25,8 +26,8 @@ public class Tracker {
      * @return - объект.
      */
     public Item add(Item item) {
-        item.setId(this.generatedId());
-        this.items[this.position++] = item;
+        item.setId(this.id++);
+        this.items.add(item);
         return item;
     }
 
@@ -37,10 +38,11 @@ public class Tracker {
      * @param item - обновленный объект.
      */
     public void update(Item item) {
-        for (int index = 0; index < this.items.length; index++) {
-            if (this.items[index] != null && this.items[index].getId().equals(item.getId())) {
-                this.items[index] = item;
-                break;
+        for (Item value : this.items) {
+            if (value.getId() == item.getId()) {
+                int index = this.items.indexOf(value);
+                this.items.set(index, item);
+
             }
         }
     }
@@ -52,8 +54,7 @@ public class Tracker {
      * @param item - удаляемый объект
      */
     public void delete(Item item) {
-        int index = this.positionSearch(item);
-        System.arraycopy(this.items, index + 1, this.items, index, this.items.length - index - 1);
+        this.items.remove(item);
     }
 
     /**
@@ -61,10 +62,8 @@ public class Tracker {
      *
      * @return -  массив найденных объектов.
      */
-    public Item[] findAll() {
-        Item[] values = new Item[this.position];
-        values = Arrays.copyOf(this.items, this.position);
-        return values;
+    public List<Item> findAll() {
+        return this.items;
     }
 
     /**
@@ -73,17 +72,14 @@ public class Tracker {
      * @param key - строковый ключ.
      * @return массив найденных объектов
      */
-    public Item[] findByName(String key) {
-        int count = 0;
-        Item[] values = new Item[this.position];
+    public List<Item> findByName(String key) {
+        List<Item> list = new ArrayList<>();
         for (Item item : this.items) {
-            if (item != null && item.getName().contains(key)) {
-                values[count] = item;
-                count++;
+            if (item.getName().contains(key)) {
+                list.add(item);
             }
         }
-
-        return Arrays.copyOf(values, count);
+        return list;
     }
 
     /**
@@ -92,34 +88,14 @@ public class Tracker {
      * @param id - Id объекта
      * @return - найденный объект.
      */
-    public Item findById(String id) {
+    public Item findById(int id) {
         Item result = null;
         for (Item item : this.items) {
-            if (item != null && item.getId().equals(id)) {
+            if (item.getId() == id) {
                 result = item;
-                break;
             }
         }
         return result;
     }
 
-    /**
-     * Генерация уникального Id состоящего из произведения времени создания объекта
-     * в милисекундах и рандомного числа в диапозоне от 1 до 100.
-     *
-     * @return уникальный Id.
-     */
-    private String generatedId() {
-        return String.valueOf(this.position);
-    }
-
-    /**
-     * Метод возвращает индекс объекта в массиве.
-     *
-     * @param item - объект для которого находится индекс
-     * @return - индекс.
-     */
-    private int positionSearch(Item item) {
-        return Arrays.asList(this.items).indexOf(item);
-    }
 }

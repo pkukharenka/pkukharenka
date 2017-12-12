@@ -21,5 +21,5 @@ public interface Input {
      * @param range - диапозон чисел для корректной работы программы.
      * @return - ответ пользователя.
      */
-    int ask(String question, int[] range);
+    int ask(String question, int range);
 }

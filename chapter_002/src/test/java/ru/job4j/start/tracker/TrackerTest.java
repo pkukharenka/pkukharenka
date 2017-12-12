@@ -44,13 +44,13 @@ public class TrackerTest {
      * Тест удаления объекта из массива.
      */
     @Test
-    public void whenDeleteItemThenItemEqualsNull() {
+    public void whenAddThreeItemsAndDeleteOneThenSizeTwo() {
         Tracker tracker = new Tracker();
         tracker.add(FIRST);
         tracker.add(SECOND);
         tracker.add(THIRD);
         tracker.delete(SECOND);
-        assertThat(tracker.findAll()[1].getName(), is("test3"));
+        assertThat(tracker.findAll().size(), is(2));
     }
 
     /**
@@ -62,7 +62,7 @@ public class TrackerTest {
         tracker.add(FIRST);
         tracker.add(SECOND);
         tracker.findAll();
-        assertThat(tracker.findAll().length, is(2));
+        assertThat(tracker.findAll().size(), is(2));
     }
 
     /**
@@ -85,7 +85,7 @@ public class TrackerTest {
         tracker.add(FIRST);
         tracker.add(SECOND);
         final String key = "est";
-        assertThat(tracker.findByName(key).length, is(2));
+        assertThat(tracker.findByName(key).size(), is(2));
     }
 
 }

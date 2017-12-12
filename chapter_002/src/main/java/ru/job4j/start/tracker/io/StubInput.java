@@ -48,18 +48,16 @@ public class StubInput implements Input {
      * @return - ответ пользователя.
      */
     @Override
-    public int ask(String question, int[] range) {
+    public int ask(String question, int range) {
         boolean exists = false;
         int key = 0;
         do {
             try {
                 key = Integer.valueOf(this.ask(question));
-                for (int value : range) {
-                    if (value == key) {
-                        exists = true;
-                        break;
-                    }
+                if (key >= 0 && key < range) {
+                    exists = true;
                 }
+
             } catch (NumberFormatException nfe) {
                 System.err.println("Введите корректное значение.");
             } catch (MenuOutException moe) {

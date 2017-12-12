@@ -40,15 +40,13 @@ public class ConsoleInput implements Input {
      * @return - ответ пользователя.
      */
     @Override
-    public int ask(String question, int[] range) {
+    public int ask(String question, int range) {
         int key = Integer.valueOf(this.ask(question));
         boolean exists = false;
-        for (int value : range) {
-            if (value == key) {
-                exists = true;
-                break;
-            }
+        if (key >= 0 && key < range) {
+            exists = true;
         }
+
         if (exists) {
             return key;
         } else {

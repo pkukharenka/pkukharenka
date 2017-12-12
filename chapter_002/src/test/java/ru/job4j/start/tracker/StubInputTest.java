@@ -33,7 +33,7 @@ public class StubInputTest {
         Input input = new StubInput(new String[]{"0", "name1", "desc1", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("name1"));
+        assertThat(tracker.findById(1).getName(), is("name1"));
     }
 
     /**
@@ -47,10 +47,10 @@ public class StubInputTest {
         Item item1 = tracker.add(FIRST);
         Item item2 = tracker.add(SECOND);
         tracker.delete(item1);
-        Input input = new StubInput(new String[]{"2", item2.getId(), "name2", "desc2", "6"});
+        Input input = new StubInput(new String[]{"2", String.valueOf(item2.getId()), "name2", "desc2", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("name2"));
+        assertThat(tracker.findAll().get(0).getName(), is("name2"));
     }
 
     /**
@@ -66,12 +66,12 @@ public class StubInputTest {
         Input input = new StubInput(new String[]{"1", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll().length, is(2));
+        assertThat(tracker.findAll().size(), is(2));
     }
 
     /**
      * Тестирование удаления заявки. Добавляем две заявки
-     * Удаляем заявку первую добавленную заявку. Проверяем, что имя заявка по индексом 0
+     * Удаляем первую добавленную заявку. Проверяем, что имя заявка по индексом 0
      * равна имени второй заявки.
      */
     @Test
@@ -79,10 +79,10 @@ public class StubInputTest {
         Tracker tracker = new Tracker();
         Item item1 = tracker.add(FIRST);
         tracker.add(SECOND);
-        Input input = new StubInput(new String[]{"3", item1.getId(), "yes", "6"});
+        Input input = new StubInput(new String[]{"3", String.valueOf(item1.getId()), "yes", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("test2"));
+        assertThat(tracker.findAll().get(0).getName(), is("test2"));
     }
 
     /**
@@ -93,7 +93,7 @@ public class StubInputTest {
     public void whenFindByIdThenItemHasSameName() {
         Tracker tracker = new Tracker();
         Item item = tracker.add(FIRST);
-        Input input = new StubInput(new String[]{"4", item.getId(), "6"});
+        Input input = new StubInput(new String[]{"4", String.valueOf(item.getId()), "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
         assertThat(tracker.findById(item.getId()).getName(), is("test1"));
@@ -116,7 +116,7 @@ public class StubInputTest {
         Input input = new StubInput(new String[]{"5", key, "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findByName(key).length, is(1));
+        assertThat(tracker.findByName(key).size(), is(1));
     }
 
     /**
@@ -129,7 +129,7 @@ public class StubInputTest {
         Input input = new StubInput(new String[]{"f", "0", "name2", "desc2", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("name2"));
+        assertThat(tracker.findAll().get(0).getName(), is("name2"));
     }
     /**
      * Тест ввода значения не входящего в диапозон работы. Программа
@@ -142,6 +142,6 @@ public class StubInputTest {
         Input input = new StubInput(new String[]{"1111", "1", "6"});
         MenuTracker menu = new MenuTracker(input, tracker);
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll().length, is(1));
+        assertThat(tracker.findAll().size(), is(1));
     }
 }

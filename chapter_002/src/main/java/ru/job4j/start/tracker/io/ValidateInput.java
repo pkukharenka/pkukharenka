@@ -22,7 +22,7 @@ public class ValidateInput extends ConsoleInput {
      * @param range    - диапозон чисел для корректной работы программы
      * @return - ответ пользователя.
      */
-    public int ask(String question, int[] range) {
+    public int ask(String question, int range) {
         boolean valid = false;
         int key = 0;
         do {
