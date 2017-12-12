@@ -8,8 +8,18 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
+/**
+ * Тесты конвертаций.
+ *
+ * @author Pyotr Kukharenka
+ * @since 12.12.2017
+ */
 public class ConvertListTest {
 
+    /**
+     * Тест проверяет конвертацию двумерного массива в коллекцию.
+     * Размер коллекции должен быть 9.
+     */
     @Test
     public void whenArrayConvertToListThenSize() {
         ConvertList convert = new ConvertList();
@@ -17,6 +27,10 @@ public class ConvertListTest {
         assertThat(convert.toList(array).size(), is(9));
     }
 
+    /**
+     * Тест проверяет конвертацию коллекции в двумерный массив.
+     * Сравниваются масисвы.
+     */
     @Test
     public void whenListConvertToArrayThen() {
         ConvertList convert = new ConvertList();
@@ -33,13 +47,17 @@ public class ConvertListTest {
         assertThat(convert.toArray(list, 3), is(exp));
     }
 
+    /**
+     * Тест проверяет конвертацию коллекции массивов в
+     * коллекцию элементов этих массивов.
+     */
     @Test
     public void whenListOfArraysConvertToAnotherListThen() {
         ConvertList convert = new ConvertList();
         List<int[]> list = new ArrayList<>();
-        list.add(new int[] {1, 2, 3, 4});
-        list.add(new int[] {5, 6, 7, 8});
-        list.add(new int[] {9, 10});
+        list.add(new int[]{1, 2, 3, 4});
+        list.add(new int[]{5, 6, 7, 8});
+        list.add(new int[]{9, 10});
         assertThat(convert.convert(list).size(), is(10));
     }
 
