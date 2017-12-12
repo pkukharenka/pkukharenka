@@ -1,6 +1,8 @@
 package ru.job4j.convert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -61,6 +63,29 @@ public class ConvertList {
             }
         }
         return array;
+    }
+
+    /**
+     * Метод преобразует коллекцию массивов в коллекцию
+     * элементов типа Integer.
+     *
+     * @param list - коллекция массивов
+     * @return коллекция элементов всех массивов.
+     */
+    public List<Integer> convert(List<int[]> list) {
+        //Результирующая коллекция
+        List<Integer> values = new ArrayList<>();
+        //Итератор по входящей коллекции
+        Iterator<int[]> it = list.iterator();
+        //Цикл по входящей коллекции для перербора всех масисвов
+        while (it.hasNext()) {
+            //Цикл для перебора элементов массивов
+            for (int number : it.next()) {
+                values.add(number);
+
+            }
+        }
+        return values;
     }
 
 }

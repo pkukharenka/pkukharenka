@@ -33,4 +33,14 @@ public class ConvertListTest {
         assertThat(convert.toArray(list, 3), is(exp));
     }
 
+    @Test
+    public void whenListOfArraysConvertToAnotherListThen() {
+        ConvertList convert = new ConvertList();
+        List<int[]> list = new ArrayList<>();
+        list.add(new int[] {1, 2, 3, 4});
+        list.add(new int[] {5, 6, 7, 8});
+        list.add(new int[] {9, 10});
+        assertThat(convert.convert(list).size(), is(10));
+    }
+
 }
