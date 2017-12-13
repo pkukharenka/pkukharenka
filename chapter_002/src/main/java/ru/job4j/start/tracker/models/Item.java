@@ -63,31 +63,6 @@ public class Item {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Item item = (Item) o;
-
-        if (id != item.id) return false;
-        if (created != item.created) return false;
-        if (name != null ? !name.equals(item.name) : item.name != null) return false;
-        if (desc != null ? !desc.equals(item.desc) : item.desc != null) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(comments, item.comments);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (desc != null ? desc.hashCode() : 0);
-        result = 31 * result + (int) (created ^ (created >>> 32));
-        result = 31 * result + Arrays.hashCode(comments);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "id='" + id + '\''
                 + ", имя='" + name + '\''

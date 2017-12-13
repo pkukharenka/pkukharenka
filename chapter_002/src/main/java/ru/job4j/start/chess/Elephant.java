@@ -36,7 +36,7 @@ public class Elephant extends Figure {
             Cell[] cells = new Cell[this.cellSize(source, dest)];
             for (int index = 0; index < cells.length; index++) {
                 if (source.getX() < dest.getX() || source.getY() < dest.getY()) {
-                    cells[index] = new Cell(source.getX() + 1+ index, source.getY() + 1+ index);
+                    cells[index] = new Cell(source.getX() + 1 + index, source.getY() + 1 + index);
                 } else {
                     cells[index] = new Cell(source.getX() - 1 - index, source.getY() - 1 - index);
                 }
