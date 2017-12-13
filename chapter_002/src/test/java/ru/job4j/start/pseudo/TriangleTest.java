@@ -19,9 +19,12 @@ public class TriangleTest {
         Shape triangle = new Triangle();
         String res = triangle.draw();
         String exp = new StringBuilder()
-                .append("   *   \n")
-                .append("  ***  \n")
-                .append(" ***** \n")
+                .append("   *   ")
+                .append(System.lineSeparator())
+                .append("  ***  ")
+                .append(System.lineSeparator())
+                .append(" ***** ")
+                .append(System.lineSeparator())
                 .append("*******").toString();
 
         assertThat(res, is(exp));

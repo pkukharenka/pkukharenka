@@ -20,12 +20,18 @@ public class SquareTest {
         Shape square = new Square();
         String res = square.draw();
         String exp = new StringBuilder()
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
                 .append("*******").toString();
         assertThat(res, is(exp));
     }

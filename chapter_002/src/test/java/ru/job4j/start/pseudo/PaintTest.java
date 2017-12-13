@@ -33,13 +33,20 @@ public class PaintTest {
         System.setOut(new PrintStream(this.out));
         new Paint(new Square()).draw();
         String exp = new StringBuilder()
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\n")
-                .append("*******\r\n").toString();
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator()).toString();
         assertThat(new String(this.out.toByteArray()), is(exp));
         System.setOut(this.ps);
     }
@@ -53,10 +60,14 @@ public class PaintTest {
         System.setOut(new PrintStream(this.out));
         new Paint(new Triangle()).draw();
         String exp = new StringBuilder()
-                .append("   *   \n")
-                .append("  ***  \n")
-                .append(" ***** \n")
-                .append("*******\r\n").toString();
+                .append("   *   ")
+                .append(System.lineSeparator())
+                .append("  ***  ")
+                .append(System.lineSeparator())
+                .append(" ***** ")
+                .append(System.lineSeparator())
+                .append("*******")
+                .append(System.lineSeparator()).toString();
         assertThat(new String(this.out.toByteArray()), is(exp));
         System.setOut(this.ps);
     }
