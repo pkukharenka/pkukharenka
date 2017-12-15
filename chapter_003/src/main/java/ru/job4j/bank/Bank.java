@@ -65,8 +65,7 @@ public class Bank {
      * @return - список счетов клиента.
      */
     public List<Account> getUserAccounts(User user) {
-        List<Account> accounts = this.base.get(user);
-        return accounts;
+        return this.base.get(user);
     }
 
     /**
