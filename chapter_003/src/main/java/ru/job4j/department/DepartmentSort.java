@@ -40,8 +40,7 @@ public class DepartmentSort {
             List<String> temp = this.splitArray(str);
             values.add(temp);
             for (int pos = 1; pos <= temp.size() - 1; pos++) {
-                List<String> test = new ArrayList<>(temp.subList(0, pos));
-                values.add(test);
+                values.add(new ArrayList<>(temp.subList(0, pos)));
             }
         }
         return this.toArray(values);
