@@ -32,20 +32,19 @@ public class PrimeIterator implements Iterator<Integer> {
     /**
      * Метод проверяет есть ли в массиве очередное
      * простое число. Если значение возвращаемое
-     * методом checkPrime больше 0 значит значение есть.
+     * методом checkPrime равно 0 значит значение есть.
      *
      * @return true - если значение есть, false - если нет.
      */
     @Override
     public boolean hasNext() {
-        return this.checkPrime() >= 0;
+        return this.checkPrime() == 0;
     }
 
     /**
      * Метод возвращает очередное простое число массива. Во-первых
-     * проверяем есть ли очередное простое число. Если есть находим
-     * позицию этого элемента в массиве с помощью метода checkPrime
-     * и возвращаем значение по этому индексу. При этом поиск следующих
+     * проверяем есть ли очередное простое число. Если есть
+     * возвращаем значение по индексу pos. При этом поиск следующих
      * элементов будет начинаться с позиции указателя.
      *
      * @return - очередное простое число.
@@ -54,8 +53,7 @@ public class PrimeIterator implements Iterator<Integer> {
     @Override
     public Integer next() throws NoSuchElementException {
         if (this.hasNext()) {
-            this.pos = this.checkPrime() + 1;
-            return this.numbers[this.pos - 1];
+            return this.numbers[this.pos++];
         } else {
             throw new NoSuchElementException("Нет простых числе");
         }
@@ -69,21 +67,20 @@ public class PrimeIterator implements Iterator<Integer> {
      * Если найден хоть один делитель сразу выходим из цикла. Делаем проверку
      * если value отлично от -1 значит очередное простое число найдено выходим
      * из верхнего цикла.
-     *
-     * @return - индекс ячейки массива где находится простое число или -1 если
-     * простых чисел нет.
      */
     private int checkPrime() {
         int value = -1;
         for (int index = this.pos; index < this.numbers.length; index++) {
             if (this.numbers[index] == 2) {
-                value = index;
+                this.pos = index;
+                value++;
                 break;
             }
             int res = (int) Math.ceil(Math.sqrt(this.numbers[index]));
             for (int number = 2; number <= res; number++) {
                 if (this.numbers[index] % number != 0 && number == res) {
-                    value = index;
+                    this.pos = index;
+                    value++;
                     break;
                 } else if (this.numbers[index] % number == 0) {
                     break;
