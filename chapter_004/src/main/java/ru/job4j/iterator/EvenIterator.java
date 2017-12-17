@@ -30,13 +30,14 @@ public class EvenIterator implements Iterator<Integer> {
     }
 
     /**
-     * Метод проверяет есть ли в массиве следующее четное значение
+     * Метод проверяет есть ли в массиве следующее четное значение.
+     * Если метод exist возвращает 0 значит значение есть.
      *
      * @return - true если значение есть.
      */
     @Override
     public boolean hasNext() {
-        return this.exist() >= 0;
+        return this.exist() == 0;
     }
 
     /**
@@ -50,8 +51,7 @@ public class EvenIterator implements Iterator<Integer> {
     @Override
     public Integer next() throws NoSuchElementException {
         if (this.hasNext()) {
-            this.pos = this.exist() + 1;
-            return this.numbers[this.pos - 1];
+            return this.numbers[this.pos++];
         } else {
             throw new NoSuchElementException("Больше нет четных элементов");
         }
@@ -69,7 +69,8 @@ public class EvenIterator implements Iterator<Integer> {
         int value = -1;
         for (int index = this.pos; index < this.numbers.length; index++) {
             if (this.numbers[index] % 2 == 0) {
-                value = index;
+                this.pos = index;
+                value++;
                 break;
             }
         }
