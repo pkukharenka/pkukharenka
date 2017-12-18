@@ -1,13 +1,18 @@
 package ru.job4j.generic;
 
+import java.util.Iterator;
+
 /**
- * Пераметризованный массив
+ * Пераметризованный контейнер. Реализует интерйфейс Iterable, что
+ * позволит перебирать элементы контейнера с помощью foreach или
+ * реализованного итератора.
  *
  * @author Pyotr Kukharenka
+ * @see Iterable
  * @since 18.12.2017
  */
 
-public class SimpleArray<T> {
+public class SimpleArray<T> implements Iterable<T> {
     /**
      * Индекс текущей ячейки массива.
      */
@@ -71,6 +76,37 @@ public class SimpleArray<T> {
     //Uncheked cast
     public T get(int index) {
         return (T) this.array[index];
+    }
+
+    /**
+     * Итератор для итерации элементов контейнера. Реализз
+     *
+     * @return итератор по элементам.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            /**
+             * Позиция указателя в при переборе
+             * элементов контейнера
+             */
+            private int pos = 0;
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean hasNext() {
+                return pos != array.length;
+            }
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public T next() {
+                return (T) array[pos++];
+            }
+        };
     }
 }
 
