@@ -95,7 +95,7 @@ public class Bank {
     public boolean transferMoney(User srcUser, Account srcAccount, User dstUser,
                                  Account dstAccount, double amount) {
         boolean flag = false;
-        if (this.base.get(dstUser).contains(dstAccount) && amount <= dstAccount.getValue()) {
+        if (this.base.get(dstUser).contains(dstAccount) && amount <= srcAccount.getValue()) {
             srcAccount.setValue(srcAccount.getValue() - amount);
             dstAccount.setValue(dstAccount.getValue() + amount);
             flag = true;

@@ -31,7 +31,7 @@ public class ComplexIter {
              */
             @Override
             public boolean hasNext() {
-                return it.hasNext();
+                return this.current.hasNext();
             }
 
             /**

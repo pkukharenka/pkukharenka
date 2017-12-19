@@ -67,4 +67,23 @@ public class ComplexIterTest {
 
         assertThat(target.hasNext(), is(false));
     }
+
+    /**
+     * Проверяем правильность работы метода hasNext, в случае
+     * если в массиве один итератор, то пройдя одно значение
+     * hasNext должен вернуть true, т.к. есть еще одно значение.
+     * вернет false.
+     */
+    @Test
+    public void whenOneIteratorAndIterateOneTimeThenHasNextTrue() {
+        ComplexIter complex = new ComplexIter();
+        List<Iterator<Integer>> list = new ArrayList<>();
+        list.add(new EvenIterator(new int[]{2, 1, 4})); //вернет 2 и 4
+        Iterator<Iterator<Integer>> iter = list.iterator();
+
+        Iterator<Integer> target = complex.convert(iter);
+        target.next();
+
+        assertThat(target.hasNext(), is(true));
+    }
 }
