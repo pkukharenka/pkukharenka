@@ -1,6 +1,7 @@
 package ru.job4j.list;
 
 import org.junit.Test;
+
 import java.util.Iterator;
 
 import static org.hamcrest.Matchers.is;
@@ -70,5 +71,44 @@ public class LinkedContainerTest {
         it.next();
         assertThat(it.hasNext(), is(false));
 
+    }
+
+    /**
+     * Проверяем что добавив два элемента и удалив указатели на
+     * первый элемент, первым элементов станет второй элемент
+     */
+    @Test
+    public void whenAddTwoElementsAndUnlinkThenFirstElementIsSecond() {
+        LinkedContainer<Integer> list = new LinkedContainer<>();
+        list.add(1);
+        list.add(2);
+        list.unlinkFirst();
+        assertThat(list.get(0), is(2));
+    }
+
+    /**
+     * Проверяем что при вызове метода unlinkFirst размер списка
+     * уменьшается на 1.
+     */
+    @Test
+    public void whenAddThreeAndUnlinkThenSizeTwo() {
+        LinkedContainer<Integer> list = new LinkedContainer<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.unlinkFirst();
+        assertThat(list.size(), is(2));
+    }
+
+    /**
+     * Проверяем что метод addFirst добавляет элемент
+     * первым в список.
+     */
+    @Test
+    public void whenAddFirstThenFirstIs5() {
+        LinkedContainer<Integer> list = new LinkedContainer<>();
+        list.add(1);
+        list.addFirst(5);
+        assertThat(list.get(0), is(5));
     }
 }

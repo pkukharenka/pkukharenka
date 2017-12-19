@@ -64,7 +64,7 @@ public class Perfomance {
         long setAdd = perf.add(set, add);
         System.out.println(String.format("Test for adding %s items in collections:\nArrayList - %s ms"
                 + "\nLinkedList - %s ms\nTreeSet - %s ms", add, arrayAdd, linkedAdd, setAdd));
-        int del = 10000;
+        int del = 5000;
         long arrayDelete = perf.delete(array, del);
         long linkedDelete = perf.delete(linked, del);
         long setDelete = perf.delete(set, del);

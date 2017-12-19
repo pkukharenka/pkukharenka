@@ -32,6 +32,30 @@ public class LinkedContainer<E> implements ListContainer<E> {
     }
 
     /**
+     * Возвращает значение элемента, стоящего первым в списке
+     * и удаляет на него ссылку (работает GC). Первым элементов
+     * становиться следующим за ним. Выбрасывает ошибку если в
+     * контейнере нет элементов
+     *
+     * @return - значение элемента, стоящего первым в списке
+     * @throws NoSuchElementException - выбрасывается в случае отсутствия
+     *                                элементов в списке
+     */
+    public E unlinkFirst() throws NoSuchElementException {
+        if (this.first == null) {
+            throw new NoSuchElementException("В списке нет элементов");
+        }
+        Node<E> temp = this.first;
+        Node<E> next = temp.next;
+        if (next != null) {
+            this.first = next;
+            next.prev = null;
+        }
+        this.size--;
+        return temp.value;
+    }
+
+    /**
      * Метод добавляет новый эелемент в конец списка. При этом
      * если последний элемент списка - null, значит список пустой
      * и мы добавляем первый элемент, если не null, то меняем ссылку у
@@ -53,6 +77,24 @@ public class LinkedContainer<E> implements ListContainer<E> {
     }
 
     /**
+     * Добавляет элемент первым в список, меняя ссылку
+     * бывшего первого элемента на данный элемент. Если список
+     * пустой выполняется обчное добавление (в конец списка)
+     *
+     * @param value - новый элемент.
+     */
+    public void addFirst(E value) {
+        if (this.first == null) {
+            this.add(value);
+        }
+        final Node<E> temp = this.first;
+        final Node<E> newNode = new Node<>(null, value, temp);
+        this.first = newNode;
+        temp.prev = this.first;
+        this.size++;
+    }
+
+    /**
      * Получение элемента из списка по индексу. Во-первых проверяем
      * валидность указанного индекса методом checkIndex (> 0 && < size),
      * Зная индекс и имея указателя на первый и последний элемент списка
@@ -68,7 +110,17 @@ public class LinkedContainer<E> implements ListContainer<E> {
         return this.searchNode(index).value;
     }
 
-    private Node<E> searchNode(int index) {
+    /**
+     * Возвращает узел под указанным индексом. При этом поиск
+     * осуществляется со сложностью O(N/2), т.к. в зависимости
+     * от индекса поиск осуществялется либо с начала списка,
+     * (если значение индекса меньше значения размерности списка
+     * на 1 бит сдвинутого вправо.), либо с конца в противном случае.
+     *
+     * @param index - индекс элемента в контейнере
+     * @return узел в контейнере под индексом index.
+     */
+    public Node<E> searchNode(int index) {
         Node<E> elem;
         if (index < (size >> 1)) {
             elem = this.first;
@@ -168,7 +220,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
      *
      * @param <E> - тип узла.
      */
-    private static class Node<E> {
+    public static class Node<E> {
         /**
          * Указатель на предыдущий узел.
          */
