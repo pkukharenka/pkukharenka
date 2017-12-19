@@ -1,6 +1,5 @@
 package ru.job4j.perfomance;
 
-import com.sun.deploy.util.StringUtils;
 
 import java.util.*;
 
@@ -25,9 +24,8 @@ public class Perfomance {
      */
     public long add(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
-        String test = String.valueOf(rn.nextInt()*1000);
         for (int index = 0; index <= amount; index++) {
-            collection.add(test);
+            collection.add(String.valueOf(index));
         }
         return System.currentTimeMillis() - start;
     }
@@ -45,7 +43,7 @@ public class Perfomance {
         this.add(collection, number);
         long start = System.currentTimeMillis();
         for (int index = 0; index <= amount; index++) {
-            collection.remove("test");
+            collection.remove(String.valueOf(index));
         }
         return System.currentTimeMillis() - start;
     }
@@ -66,7 +64,7 @@ public class Perfomance {
         long setAdd = perf.add(set, add);
         System.out.println(String.format("Test for adding %s items in collections:\nArrayList - %s ms"
                 + "\nLinkedList - %s ms\nTreeSet - %s ms", add, arrayAdd, linkedAdd, setAdd));
-        int del = 9000;
+        int del = 10000;
         long arrayDelete = perf.delete(array, del);
         long linkedDelete = perf.delete(linked, del);
         long setDelete = perf.delete(set, del);
