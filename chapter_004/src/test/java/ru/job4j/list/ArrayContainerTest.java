@@ -6,19 +6,19 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
- * Тесты для проверки работы контейнера ListImpl
+ * Тесты для проверки работы контейнера ArrayContainer
  *
  * @author Pyotr Kukharenka
  * @since 18.12.2017
  */
-public class ListImplTest {
+public class ArrayContainerTest {
     /**
      * Првоеряем что размер массива корректно увеличивается при
      * добавлении более 2 элементов (ставим начальный размер массива 2)
      */
     @Test
     public void whenAddMoreThanCapacityThenNewCapacity() {
-        ListImpl<Integer> list = new ListImpl<>(2);
+        ArrayContainer<Integer> list = new ArrayContainer<>(2);
         list.add(1);
         list.add(2);
         list.add(3);
@@ -31,7 +31,7 @@ public class ListImplTest {
      */
     @Test
     public void whenAddElemAndGetHimThenElementValueIs1() {
-        ListImpl<Integer> list = new ListImpl<>(2);
+        ArrayContainer<Integer> list = new ArrayContainer<>(2);
         list.add(1);
         assertThat(list.get(0), is(1));
     }
@@ -42,7 +42,7 @@ public class ListImplTest {
      */
     @Test
     public void whenAddStringTypeThenAllCorrect() {
-        ListImpl<String> list = new ListImpl<>(2);
+        ArrayContainer<String> list = new ArrayContainer<>(2);
         list.add("test");
         assertThat(list.size(), is(1));
     }
@@ -53,7 +53,7 @@ public class ListImplTest {
      */
     @Test
     public void whenAddOneElemThenSizeIsOne() {
-        ListImpl<String> list = new ListImpl<>(4);
+        ArrayContainer<String> list = new ArrayContainer<>(4);
         list.add("test1");
         list.add("test2");
         assertThat(list.size(), is(2));

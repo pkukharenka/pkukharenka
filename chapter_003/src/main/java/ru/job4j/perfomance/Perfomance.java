@@ -1,5 +1,7 @@
 package ru.job4j.perfomance;
 
+import com.sun.deploy.util.StringUtils;
+
 import java.util.*;
 
 /**
@@ -11,6 +13,8 @@ import java.util.*;
  */
 
 public class Perfomance {
+
+    Random rn = new Random();
     /**
      * Метод для добавления элементов в коллекцию
      *
@@ -21,7 +25,7 @@ public class Perfomance {
      */
     public long add(Collection<String> collection, int amount) {
         long start = System.currentTimeMillis();
-        String test = "test";
+        String test = String.valueOf(rn.nextInt()*1000);
         for (int index = 0; index <= amount; index++) {
             collection.add(test);
         }

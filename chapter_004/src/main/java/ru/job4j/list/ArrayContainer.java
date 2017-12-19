@@ -11,7 +11,7 @@ import java.util.Iterator;
  * @since 18.12.2017
  */
 
-public class ListImpl<E> implements ListContainer<E> {
+public class ArrayContainer<E> implements ListContainer<E> {
     /**
      * Размер контейнера по умолчанию
      */
@@ -27,7 +27,7 @@ public class ListImpl<E> implements ListContainer<E> {
      * Конструктор по умолчанию создает контейнер для
      * хранения 10 элементов.
      */
-    public ListImpl() {
+    public ArrayContainer() {
         this.array = new Object[INIT_CAPACITY];
     }
 
@@ -37,7 +37,7 @@ public class ListImpl<E> implements ListContainer<E> {
      *
      * @param capacity - рамер массива.
      */
-    public ListImpl(final int capacity) {
+    public ArrayContainer(final int capacity) {
         this.array = new Object[capacity];
     }
 
