@@ -20,8 +20,10 @@ public class ArrayContainer<E> implements ListContainer<E> {
      * Массив для хранения элементов.
      */
     private Object[] array;
-
-    private int index = 0;
+    /**
+     * Количество элементов в контейнере.
+     */
+    private int size = 0;
 
     /**
      * Конструктор по умолчанию создает контейнер для
@@ -50,8 +52,8 @@ public class ArrayContainer<E> implements ListContainer<E> {
      */
     @Override
     public void add(E value) {
-        this.checkCapacity(this.index + 1);
-        this.array[this.index++] = value;
+        this.checkCapacity(this.size + 1);
+        this.array[this.size++] = value;
     }
 
     /**
@@ -83,7 +85,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
      */
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
-        if (index < this.index) {
+        if (index < this.size) {
             return (E) this.array[index];
         } else {
             throw new IndexOutOfBoundsException("Вы вышли за пределы размерности массива.");
@@ -97,9 +99,32 @@ public class ArrayContainer<E> implements ListContainer<E> {
      */
     @Override
     public int size() {
-        return this.index;
+        return this.size;
     }
 
+    /**
+     * Возвращает true если контейнер содержит элемент value
+     *
+     * @param value - элемент для проверки наличия его в контейнере.
+     * @return - true если контейнер содержит элемент value.
+     */
+    @Override
+    public boolean contains(E value) {
+        boolean flag = false;
+        for (Object o : this.array) {
+            if (o != null && o.equals(value)) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * Возвращает итератор по элементам контейнера.
+     *
+     * @return - возвращает итератор по элементам контейнера
+     */
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
@@ -114,7 +139,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
              */
             @Override
             public boolean hasNext() {
-                return this.pos != index;
+                return this.pos != size;
             }
 
             /**

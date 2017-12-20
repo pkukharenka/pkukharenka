@@ -58,4 +58,26 @@ public class ArrayContainerTest {
         list.add("test2");
         assertThat(list.size(), is(2));
     }
+
+    /**
+     * Првоеряем, что метод contains возвращет true если такой объект
+     * содержится в контейнере.
+     */
+    @Test
+    public void whenAddElementAndCheckContainsItThenTrue() {
+        ArrayContainer<String> list = new ArrayContainer<>(4);
+        list.add("test1");
+        assertThat(list.contains("test1"), is(true));
+    }
+    /**
+     * Првоеряем, что метод contains возвращет false если такой объект
+     * не содержится в контейнере.
+     */
+    @Test
+    public void whenAddElementAndCheckContainsAnotherValueThenFalse() {
+        ArrayContainer<Integer> list = new ArrayContainer<>(4);
+        list.add(2);
+        assertThat(list.contains(3), is(false));
+    }
+
 }

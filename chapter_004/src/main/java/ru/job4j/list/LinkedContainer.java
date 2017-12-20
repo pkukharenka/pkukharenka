@@ -161,6 +161,26 @@ public class LinkedContainer<E> implements ListContainer<E> {
     }
 
     /**
+     * Возвращает true если контейнер содержит элемент value.
+     * Производим перебор всех элементов списка от указателя на первый
+     * элемент до последнего.
+     *
+     * @param value - элемент для проверки наличия его в контейнере.
+     * @return - true если контейнер содержит элемент value.
+     */
+    @Override
+    public boolean contains(E value) {
+        boolean flag = false;
+        for (Node<E> node = this.first; node == this.last; node = node.next) {
+            if (node.value.equals(value)) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    /**
      * Итератор для последовательного перербора элементов контейнера.
      *
      * @return - итератор.

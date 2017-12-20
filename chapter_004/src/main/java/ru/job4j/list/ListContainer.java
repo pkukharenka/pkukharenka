@@ -32,4 +32,12 @@ public interface ListContainer<E> extends Iterable<E> {
      * @return - размер контейнеар.
      */
     int size();
+
+    /**
+     * Возвращает true если контейнер содержит указанный элемент.
+     *
+     * @param value - элемент для проверки наличия его в контейнере
+     * @return - true если контейнер содержит указанный элемент
+     */
+    boolean contains(E value);
 }

@@ -111,4 +111,25 @@ public class LinkedContainerTest {
         list.addFirst(5);
         assertThat(list.get(0), is(5));
     }
+    /**
+     * Првоеряем, что метод contains возвращет true если такой объект
+     * содержится в контейнере.
+     */
+
+    @Test
+    public void whenAddElementAndCheckContainsItThenTrue() {
+        LinkedContainer<String> list = new LinkedContainer<>();
+        list.add("test1");
+        assertThat(list.contains("test1"), is(true));
+    }
+    /**
+     * Првоеряем, что метод contains возвращет false если такой объект
+     * не содержится в контейнере.
+     */
+    @Test
+    public void whenAddElementAndCheckContainsAnotherValueThenFalse() {
+        LinkedContainer<Integer> list = new LinkedContainer<>();
+        list.add(2);
+        assertThat(list.contains(3), is(false));
+    }
 }
