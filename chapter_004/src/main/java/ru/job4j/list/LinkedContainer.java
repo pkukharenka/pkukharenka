@@ -171,7 +171,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
     @Override
     public boolean contains(E value) {
         boolean flag = false;
-        for (Node<E> node = this.first; node == this.last; node = node.next) {
+        for (Node<E> node = this.first; node != null; node = node.next) {
             if (node.value.equals(value)) {
                 flag = true;
                 break;

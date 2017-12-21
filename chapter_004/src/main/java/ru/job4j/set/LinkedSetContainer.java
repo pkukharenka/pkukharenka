@@ -1,25 +1,23 @@
 package ru.job4j.set;
 
-import ru.job4j.list.ArrayContainer;
+import ru.job4j.list.LinkedContainer;
 import ru.job4j.list.ListContainer;
 
 import java.util.Iterator;
 
 /**
  * Контейнер типа Set, позволяющий хранить только уникальные
- * значения элементов. Реализован на базе массивов.
+ * значения элементов. Реализован на базе свявзного списка.
  *
  * @author Pyotr Kukharenka
- * @see ArrayContainer
+ * @see LinkedContainer
  * @see ListContainer
  * @since 20.12.2017
  */
 
-public class SetContainer<E> implements Iterable<E> {
-    /**
-     * Хранилище элементов на базе массива.
-     */
-    private ArrayContainer<E> array = new ArrayContainer<>();
+public class LinkedSetContainer<E> implements Iterable<E> {
+
+    private LinkedContainer<E> list = new LinkedContainer<>();
 
     /**
      * Метод добавляет новый элемент в контейнер. При этом изначально
@@ -30,8 +28,8 @@ public class SetContainer<E> implements Iterable<E> {
      */
     public boolean add(E value) {
         boolean flag = false;
-        if (!this.array.contains(value)) {
-            this.array.add(value);
+        if (!this.list.contains(value)) {
+            this.list.add(value);
             flag = true;
         }
         return flag;
@@ -43,11 +41,11 @@ public class SetContainer<E> implements Iterable<E> {
      * @return - размер контейнера.
      */
     public int size() {
-        return this.array.size();
+        return this.list.size();
     }
 
     @Override
     public Iterator<E> iterator() {
-        return this.array.iterator();
+        return this.list.iterator();
     }
 }
