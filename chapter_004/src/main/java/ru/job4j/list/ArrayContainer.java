@@ -2,6 +2,7 @@ package ru.job4j.list;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Реализация динамического контейнера, позволяющего
@@ -147,6 +148,9 @@ public class ArrayContainer<E> implements ListContainer<E> {
              */
             @Override
             public E next() {
+                if (this.pos > size) {
+                    throw new NoSuchElementException("No more elements");
+                }
                 return (E) array[pos++];
             }
         };

@@ -47,12 +47,14 @@ public class SimpleArray<T> implements Iterable<T> {
      * элемента осуществляется за счет копирования всех
      * элементов текущего массива с позиции index + 1 в
      * этот же массив начиная с index (другими словами
-     * смещение всех элементов массива на единицу влево)
+     * смещение всех элементов массива на единицу влево),
+     * при этом последний элемент затирается.
      *
      * @param index - индекс ячейки для удаления.
      */
     public void delete(int index) {
         System.arraycopy(this.array, index + 1, this.array, index, this.array.length - index - 1);
+        this.array[--this.index] = null;
     }
 
     /**
