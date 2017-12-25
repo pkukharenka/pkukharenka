@@ -55,7 +55,7 @@ public class HashSetContainerTest {
         HashSetContainer<Integer> set = new HashSetContainer<>();
         set.add(1);
         set.add(2);
-        assertThat(set.remove(1), is(true));
+        assertThat(set.remove(2), is(true));
 
     }
 

@@ -3,10 +3,9 @@ package ru.job4j.iterator;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
@@ -17,73 +16,70 @@ import static org.junit.Assert.*;
  * @since 17.12.2017
  */
 public class ComplexIterTest {
-    /**
-     * Коллекция итераторов.
-     */
-    private List<Iterator<Integer>> list = new ArrayList<>();
 
-    /**
-     * Метод запускается перед тестами для инициализации коллекции
-     * итераторов. Коллекци содержит 2 итератора, 1 - только четные
-     * числа, 2 - только простые числа.
-     */
+    Iterator<Integer> it;
+
     @Before
-    public void init() {
-        this.list.add(new EvenIterator(new int[]{2, 1, 4})); //вернет 2 и 4
-        this.list.add(new PrimeIterator(new int[]{7, 15, 2})); //вернет 7, 2
+    public void setUp() {
+        Iterator<Integer> it1 = Arrays.asList(1, 2, 3).iterator();
+        Iterator<Integer> it2 = Arrays.asList(4, 5, 6).iterator();
+        Iterator<Integer> it3 = Arrays.asList(7, 8, 9).iterator();
+        Iterator<Iterator<Integer>> its = Arrays.asList(it1, it2, it3).iterator();
+        ComplexIter converter = new ComplexIter();
+        it = converter.convert(its);
     }
 
-    /**
-     * Проверяем что при вызове 3 раз метода next значение
-     * будет 7, т.к. 1 итератор пройдет 2 значения (2 и 4),
-     * 2 итератор остановится на 1 значении  - 7.
-     */
-    @Test
-    public void whenNext3TiemThenElement7() {
-        ComplexIter complex = new ComplexIter();
-        Iterator<Iterator<Integer>> iter = this.list.iterator();
-
-        Iterator<Integer> target = complex.convert(iter);
-        target.next();
-        target.next();
-
-        assertThat(target.next(), is(7));
+    @Test(expected = NoSuchElementException.class)
+    public void hasNextNextSequentialInvocation() {
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(2));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(3));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(4));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(5));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(6));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(7));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(8));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(9));
+        assertThat(it.hasNext(), is(false));
+        it.next();
     }
 
-    /**
-     * Проверяем что при проходе всех элементов метод hasNext
-     * вернет false.
-     */
-    @Test
-    public void whenNext4TimeThenHasNextFalse() {
-        ComplexIter complex = new ComplexIter();
-        Iterator<Iterator<Integer>> iter = this.list.iterator();
-
-        Iterator<Integer> target = complex.convert(iter);
-        target.next();
-        target.next();
-        target.next();
-        target.next();
-
-        assertThat(target.hasNext(), is(false));
+    @Test(expected = NoSuchElementException.class)
+    public void testsThatNextMethodDoesntDependsOnPriorHasNextInvocation() {
+        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(2));
+        assertThat(it.next(), is(3));
+        assertThat(it.next(), is(4));
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(6));
+        assertThat(it.next(), is(7));
+        assertThat(it.next(), is(8));
+        assertThat(it.next(), is(9));
+        it.next();
     }
 
-    /**
-     * Проверяем правильность работы метода hasNext, в случае
-     * если в массиве один итератор, то пройдя одно значение
-     * hasNext должен вернуть true, т.к. есть еще одно значение.
-     * вернет false.
-     */
-    @Test
-    public void whenOneIteratorAndIterateOneTimeThenHasNextTrue() {
-        ComplexIter complex = new ComplexIter();
-        List<Iterator<Integer>> list = new ArrayList<>();
-        list.add(new EvenIterator(new int[]{2, 1, 4})); //вернет 2 и 4
-        Iterator<Iterator<Integer>> iter = list.iterator();
-
-        Iterator<Integer> target = complex.convert(iter);
-        target.next();
-
-        assertThat(target.hasNext(), is(true));
+    @Test(expected = NoSuchElementException.class)
+    public void sequentialHasNextInvocationDoesntAffectRetrievalOrder() {
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(2));
+        assertThat(it.next(), is(3));
+        assertThat(it.next(), is(4));
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(6));
+        assertThat(it.next(), is(7));
+        assertThat(it.next(), is(8));
+        assertThat(it.next(), is(9));
+        it.next();
     }
 }

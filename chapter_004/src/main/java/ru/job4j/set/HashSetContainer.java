@@ -88,18 +88,23 @@ public class HashSetContainer<E> {
      * Увеличивает размер масисва в 2 раза при достижении количества
      * элементов параетру загрузки. Для каждого элемента старого массива
      * вычисляются позиции в новом массиве с учетом его размерности.
+     * Элементы старого массива после перезаписи в новый зануляем.
      */
     private void resize() {
-        int oldSize = this.table.length;
+        Entry<E>[] oldTab = this.table;
+        int oldSize = oldTab.length;
         int newSize = oldSize * 2;
-        Entry<?>[] newTable = new Entry<?>[newSize];
-        for (Entry<E> e : this.table) {
-            for (; e != null; e = e.next) {
+        Entry<E>[] newTab = (Entry<E>[]) new Entry[newSize];
+        this.table = newTab;
+        for (int i = 0; i < oldTab.length; i++) {
+            Entry<E> e = oldTab[i];
+            if (e != null) {
                 int index = e.hash & (newSize - 1);
-                newTable[index] = e;
+                newTab[index] = e;
+                oldTab[i] = null;
             }
+
         }
-        this.table = (Entry<E>[]) newTable;
     }
 
     /**

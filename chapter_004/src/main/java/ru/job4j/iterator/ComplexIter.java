@@ -31,7 +31,16 @@ public class ComplexIter {
              */
             @Override
             public boolean hasNext() {
-                return this.current.hasNext();
+                boolean flag = false;
+                if (this.current.hasNext()) {
+                    flag = true;
+                } else {
+                    if (it.hasNext()) {
+                        this.current = it.next();
+                        flag = this.hasNext();
+                    }
+                }
+                return flag;
             }
 
             /**
