@@ -81,24 +81,26 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     }
 
     /**
-     * Возвращает дерево в виде листа для реализации
-     * итератора.
+     * Возвращает true если дерево бинарное.
      *
-     * @return - лист с элемента дерева.
+     * @return - true если дерево бинарное.
      */
-    private List<Node<E>> asList() {
+    public boolean isBinary() {
+        boolean flag = true;
         Deque<Node<E>> data = new LinkedList<>();
-        List<Node<E>> list = new ArrayList<>();
         data.offer(this.root);
-        list.add(this.root);
         while (!data.isEmpty()) {
-            Node<E> e = data.poll();
-            for (Node<E> child : e.childs()) {
-                data.offer(child);
-                list.add(child);
+            Node<E> next = data.poll();
+            if (next.childs().size() <= 2) {
+                for (Node<E> e : next.childs()) {
+                    data.offer(e);
+                }
+            } else {
+                flag = false;
+                break;
             }
         }
-        return list;
+        return flag;
     }
 
     /**
@@ -109,24 +111,23 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
-            /**
-             * Лист с элементами дерева.
-             */
-            List<Node<E>> list = asList();
-            /**
-             * Индекс элемента листа.
-             */
-            int index = 0;
+            Deque<Node<E>> data = new LinkedList<>();
+
+            {
+                this.data.offer(root);
+            }
+
+            Node<E> next;
 
             /**
-             * Возвращает true, если индекс очередного элемента
-             * меньше количества элементов в списке.
+             * Возвращает true, если количество элементов в очереди
+             * больше 0.
              *
-             * @return - true, если есть очередной элемент.
+             * @return - true, если количество элементов в очереди больше 0.
              */
             @Override
             public boolean hasNext() {
-                return index < list.size();
+                return this.data.size() > 0;
             }
 
             /**
@@ -137,12 +138,17 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
              */
             @Override
             public E next() {
-                E value;
-                if (this.hasNext()) {
-                    value = this.list.get(index++).getValue();
-                } else
+                this.next = this.data.poll();
+                if (this.next != null) {
+                    if (data.isEmpty()) {
+                        for (Node<E> child : next.childs()) {
+                            this.data.offer(child);
+                        }
+                    }
+                    return next.getValue();
+                } else {
                     throw new NoSuchElementException();
-                return value;
+                }
             }
         };
     }

@@ -36,7 +36,7 @@ public class TreeTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void whenThen() {
+    public void whenIterateTreeThenException() {
         Tree<Integer> tree = new Tree<>(1);
         tree.add(1, 2);
         tree.add(1, 3);
@@ -49,6 +49,17 @@ public class TreeTest {
         assertThat(it.next(), is(3));
         assertFalse(it.hasNext());
         it.next();
+    }
+
+    @Test
+    public void whenAllNodesHasLessThanTwoChildsThenBinary() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 4);
+        tree.add(2, 5);
+        tree.add(3, 6);
+        assertTrue(tree.isBinary());
     }
 
 }
