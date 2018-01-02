@@ -127,7 +127,7 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
              */
             @Override
             public boolean hasNext() {
-                return this.data.size() > 0;
+                return !this.data.isEmpty();
             }
 
             /**

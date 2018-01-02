@@ -29,6 +29,8 @@ public class Analyse {
      */
     private HashMap<String, TreeMap<Integer, Integer>> ask = new HashMap<>();
 
+    private static final String BUY = "BUY";
+
     /**
      * Возвращает структуру со всеми заявками по предложениям и спросу
      * книг. Информация парсится из xml файла. В качестве обработчика
@@ -73,7 +75,7 @@ public class Analyse {
     public void fillMaps(String fileName) {
         HashMap<Integer, Order> orders = this.parseFile(fileName);
         for (Order order : orders.values()) {
-            if (order.getOperation().equals("BUY")) {
+            if (BUY.equals(order.getOperation())) {
                 this.add(this.bid, this.ask, order, (o1, o2) -> -(o1 - o2));
             } else {
                 this.add(this.ask, this.bid, order, (o1, o2) -> o1 - o2);

@@ -1,5 +1,8 @@
 package ru.job4j.tree;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 /**
  * Бинарное дерево поиска.
  *
@@ -26,33 +29,50 @@ public class BinaryTree<E extends Comparable<E>> {
 
     /**
      * Добавление нового значения в дерево.
+     * 1. Если приходит нулевой узел -> значит элементовнет,
+     * добавляем корень.
+     * 2. Если значение для добавления меньше либо равно значению полученного
+     * родительского узла -> добавляем в левое поддерево.
+     * 3. В остальных случаях в правое поддерево
      *
      * @param e - значение для добавления
      */
     public void add(E e) {
-        this.root = this.search(this.root, e);
+        TreeNode<E> node = this.search(this.root, e);
+        if (node == null) {
+            this.root = new TreeNode<>(e);
+        } else if (e.compareTo(node.value) <= 0) {
+            node.left = new TreeNode<>(e);
+        } else {
+            node.right = new TreeNode<>(e);
+        }
         this.size++;
     }
 
     /**
-     * Метод поиска нужного узла для создания его дочернего
-     * элемента. Реализуется за счет рекурсии. Если добавляемое значение
-     * меньше или равно корню идем по левой ветке, если больше, то по правой
-     * до тех пор пока узел не будет равен null -> дошли до низа.
+     * Возвращает нижний ненулевой родительский узел, в который
+     * будет добавлен новый узел.
      *
      * @param node - узел для поиска.
      * @param e    - значение для добавления
-     * @return - дерево с добавленным значением.
+     * @return - нижний ненулевой родительский узел.
      */
     private TreeNode<E> search(TreeNode<E> node, E e) {
-        if (node == null) {
-            node = new TreeNode<>(e);
-        } else if (e.compareTo(node.value) <= 0) {
-            node.left = search(node.left, e);
-        } else {
-            node.right = search(node.right, e);
+        Deque<TreeNode<E>> data = new LinkedList<>();
+        data.offer(node);
+        TreeNode<E> current = null;
+        while (!data.isEmpty()) {
+            current = data.poll();
+            if (current == null) {
+                break;
+            }
+            if (e.compareTo(current.value) <= 0 && current.left != null) {
+                data.offer(current.left);
+            } else if (e.compareTo(current.value) > 0 && current.right != null) {
+                data.offer(current.right);
+            }
         }
-        return node;
+        return current;
     }
 
     /**
