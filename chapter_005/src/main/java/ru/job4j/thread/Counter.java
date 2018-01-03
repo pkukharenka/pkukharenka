@@ -40,7 +40,7 @@ public class Counter {
      * @return - поток, подсчитывающий количество пробелов в тексте.
      */
     private Thread calcSpace() {
-        Thread space = new Thread(new Runnable() {
+        return new Thread(new Runnable() {
             @Override
             public void run() {
                 int count = 0;
@@ -52,7 +52,6 @@ public class Counter {
                 System.out.println(String.format("Количество пробелов: %s", count));
             }
         });
-        return space;
     }
 
     /**
@@ -61,21 +60,20 @@ public class Counter {
      * @return - поток, подсчитывающий количество слов в тексте.
      */
     private Thread calcWord() {
-        Thread word = new Thread(new Runnable() {
+        return new Thread(new Runnable() {
             @Override
             public void run() {
                 char[] chars = toChar(text);
                 int count = 0;
                 for (int i = 1; i < chars.length; i++) {
-                    if ((chars[i] < 65 || (chars[i] > 90 && chars[i] < 97) || chars[i] > 122) &&
-                            ((chars[i - 1] >= 65 && chars[i - 1] <= 90) || (chars[i - 1] >= 97 && chars[i - 1] <= 122))) {
+                    if ((chars[i] < 65 || (chars[i] > 90 && chars[i] < 97) || chars[i] > 122)
+                            && ((chars[i - 1] >= 65 && chars[i - 1] <= 90) || (chars[i - 1] >= 97 && chars[i - 1] <= 122))) {
                         count++;
                     }
                 }
                 System.out.println(String.format("Количество слов: %s", count));
             }
         });
-        return word;
     }
 
     /**
