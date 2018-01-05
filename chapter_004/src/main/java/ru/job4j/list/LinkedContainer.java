@@ -1,24 +1,30 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Контейнер для хранения данных на базе связного списка
+ * Потокобезопасный контейнер для хранения данных
+ * на базе связного списка
  *
  * @author Pyotr Kukharenka
  * @since 19.12.2017
  */
-
+@ThreadSafe
 public class LinkedContainer<E> implements ListContainer<E> {
 
     /**
      * Указатель на первый элемент контейнера.
      */
+    @GuardedBy("this")
     private Node<E> first;
     /**
      * Указатель на последний элемент контейнера.
      */
+    @GuardedBy("this")
     private Node<E> last;
     /**
      * Количество элементов в контейнере
@@ -41,7 +47,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
      * @throws NoSuchElementException - выбрасывается в случае отсутствия
      *                                элементов в списке
      */
-    public E unlinkFirst() throws NoSuchElementException {
+    public synchronized E unlinkFirst() throws NoSuchElementException {
         if (this.first == null) {
             throw new NoSuchElementException("В списке нет элементов");
         }
@@ -64,12 +70,12 @@ public class LinkedContainer<E> implements ListContainer<E> {
      * @param value - значение элемента
      */
     @Override
-    public void add(E value) {
+    public synchronized void add(E value) {
         final Node<E> tempLast = this.last;
         final Node<E> newNode = new Node<>(this.last, value, null);
         this.last = newNode;
         if (tempLast == null) {
-            first = newNode;
+            this.first = newNode;
         } else {
             tempLast.next = newNode;
         }
@@ -83,13 +89,12 @@ public class LinkedContainer<E> implements ListContainer<E> {
      *
      * @param value - новый элемент.
      */
-    public void addFirst(E value) {
+    public synchronized void addFirst(E value) {
         if (this.first == null) {
             this.add(value);
         }
         final Node<E> temp = this.first;
-        final Node<E> newNode = new Node<>(null, value, temp);
-        this.first = newNode;
+        this.first = new Node<>(null, value, temp);
         temp.prev = this.first;
         this.size++;
     }
@@ -102,7 +107,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
      * или последнего элемента.
      *
      * @param index - индекс ячейки контейнера.
-     * @return
+     * @return - элемента из списка по индексу.
      */
     @Override
     public E get(int index) {
@@ -120,7 +125,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
      * @param index - индекс элемента в контейнере
      * @return узел в контейнере под индексом index.
      */
-    public Node<E> searchNode(int index) {
+    public synchronized Node<E> searchNode(int index) {
         Node<E> elem;
         if (index < (size >> 1)) {
             elem = this.first;
@@ -169,7 +174,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
      * @return - true если контейнер содержит элемент value.
      */
     @Override
-    public boolean contains(E value) {
+    public synchronized boolean contains(E value) {
         boolean flag = false;
         for (Node<E> node = this.first; node != null; node = node.next) {
             if (node.value.equals(value)) {

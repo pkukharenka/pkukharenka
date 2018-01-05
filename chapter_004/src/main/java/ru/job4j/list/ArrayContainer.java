@@ -1,17 +1,21 @@
 package ru.job4j.list;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Реализация динамического контейнера, позволяющего
+ * Потокобезопасная реализация динамического контейнера, позволяющего
  * хранить любые объекты.
  *
  * @author Pyotr Kukharenka
  * @since 18.12.2017
  */
 
+@ThreadSafe
 public class ArrayContainer<E> implements ListContainer<E> {
     /**
      * Размер контейнера по умолчанию
@@ -20,6 +24,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
     /**
      * Массив для хранения элементов.
      */
+    @GuardedBy("this")
     private Object[] array;
     /**
      * Количество элементов в контейнере.
@@ -52,7 +57,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
      * @param value - значение элемента
      */
     @Override
-    public void add(E value) {
+    public synchronized void add(E value) {
         this.checkCapacity(this.size + 1);
         this.array[this.size++] = value;
     }
@@ -66,7 +71,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
      *
      * @param capacity - следующий индекс массива.
      */
-    private void checkCapacity(int capacity) {
+    private synchronized void checkCapacity(int capacity) {
         int oldCapacity = this.array.length;
         if (oldCapacity - capacity < 0) {
             int newCapacity = oldCapacity * 3;
@@ -85,7 +90,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
      *                                   в массиве нет.
      */
     @Override
-    public E get(int index) throws IndexOutOfBoundsException {
+    public synchronized E get(int index) throws IndexOutOfBoundsException {
         if (index < this.size) {
             return (E) this.array[index];
         } else {
@@ -110,7 +115,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
      * @return - true если контейнер содержит элемент value.
      */
     @Override
-    public boolean contains(E value) {
+    public synchronized boolean contains(E value) {
         boolean flag = false;
         for (Object o : this.array) {
             if (o != null && o.equals(value)) {
