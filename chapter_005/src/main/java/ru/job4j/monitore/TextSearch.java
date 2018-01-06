@@ -56,6 +56,18 @@ public class TextSearch {
         this.ext = ext;
     }
 
+    public synchronized void addQueue(File file) {
+        this.queue.offer(file);
+    }
+
+    public synchronized File pollQueue() {
+        return this.queue.poll();
+    }
+
+    public synchronized void addList(String fileName) {
+        this.list.add(fileName);
+    }
+
     //Геттеры для полей класса.
     public String getExt() {
         return ext;
@@ -63,14 +75,6 @@ public class TextSearch {
 
     public String getText() {
         return text;
-    }
-
-    public synchronized List<String> getList() {
-        return this.list;
-    }
-
-    public synchronized Deque<File> getQueue() {
-        return queue;
     }
 
     /**
@@ -81,7 +85,7 @@ public class TextSearch {
      * выводятся на консоль.
      *
      * @return - список с файлами в которых был найден искомый текст.
-     * @throws InterruptedException - выбрасывается.
+     * @throws InterruptedException - выбрасывается при проблемах с потоком.
      */
     public List<String> result() throws InterruptedException {
         Thread find = new FileSearchThread(this, new File(this.fileName));
@@ -92,7 +96,7 @@ public class TextSearch {
             th.start();
             th.join();
         }
-        for (String str : this.getList()) {
+        for (String str : this.list) {
             System.out.println(str);
         }
         return this.list;
@@ -102,10 +106,10 @@ public class TextSearch {
      * Запсук программы.
      *
      * @param args - аргументы программы.
-     * @throws InterruptedException
+     * @throws InterruptedException - выбрасывается при проблемах с потоком.
      */
     public static void main(String[] args) throws InterruptedException {
-        TextSearch search = new TextSearch("E:\\hello", "e", ".bat");
+        TextSearch search = new TextSearch("E:\\hello", "e", ".txt");
         search.result();
     }
 }
@@ -145,7 +149,7 @@ class FileSearchThread extends Thread {
             File[] files = this.root.listFiles();
             for (File file : files) {
                 if (!file.isDirectory() && file.getName().contains(search.getExt())) {
-                    this.search.getQueue().offer(file);
+                    this.search.addQueue(file);
                 } else if (file.isDirectory()) {
                     new FileSearchThread(this.search, file).start();
                 }
@@ -178,10 +182,10 @@ class TextSearchThread extends Thread {
      */
     @Override
     public void run() {
-        File file = this.search.getQueue().poll();
+        File file = this.search.pollQueue();
         String input = this.textFromFile(file);
         if (input.matches(".*" + this.search.getText() + "+.*")) {
-            this.search.getList().add(file.getAbsolutePath());
+            this.search.addList(file.getAbsolutePath());
         }
     }
 

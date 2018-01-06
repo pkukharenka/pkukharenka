@@ -21,6 +21,7 @@ public class UserStorage {
     /**
      * Количество объектов в массиве.
      */
+    @GuardedBy("this")
     private int index;
     /**
      * Дефолтный размер массива.
