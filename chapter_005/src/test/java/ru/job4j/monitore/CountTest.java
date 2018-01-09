@@ -26,10 +26,14 @@ public class CountTest {
         Count count = new Count();
         Thread first = new CountThread(count);
         Thread second = new CountThread(count);
+
         first.start();
         second.start();
+
         first.join();
         second.join();
+
+
         assertThat(count.get(), is(2));
     }
 

@@ -11,15 +11,17 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class Count {
-
-    @GuardedBy("this")
+    private final MyLock lock = new MyLock();
+    @GuardedBy("lock")
     private int value;
 
     /**
      * Синхронизированный метод. Увеличивает значение на 1.
      */
-    public synchronized void increment() {
+    public void increment() {
+        this.lock.lock();
         this.value++;
+        this.lock.unlock();
     }
 
     /**
@@ -27,8 +29,11 @@ public class Count {
      *
      * @return - значение
      */
-    public synchronized int get() {
-        return this.value;
+    public int get() {
+        int res = 0;
+        this.lock.lock();
+        res = this.value;
+        this.lock.unlock();
+        return res;
     }
-
 }
