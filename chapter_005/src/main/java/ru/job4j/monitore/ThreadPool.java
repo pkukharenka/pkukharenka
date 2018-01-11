@@ -21,15 +21,11 @@ public class ThreadPool {
     private final Queue<Runnable> queue;
 
     /**
-     * Конструктор, запускающий потоки.
-     *
-     * @param threadNumb - количество запускаемых потоков.
+     * Конструктор.
      */
-    public ThreadPool(int threadNumb) {
+    public ThreadPool() {
         this.queue = new LinkedList<>();
-        for (int count = 0; count < threadNumb; count++) {
-            new Thread(new Worker()).start();
-        }
+
     }
 
     /**
@@ -41,6 +37,17 @@ public class ThreadPool {
         synchronized (this.queue) {
             this.queue.offer(work);
             this.queue.notifyAll();
+        }
+    }
+
+    /**
+     * Инициализации потоков.
+     *
+     * @param threadNumb - количество потоков.
+     */
+    public void start(int threadNumb) {
+        for (int count = 0; count < threadNumb; count++) {
+            new Thread(new Worker()).start();
         }
     }
 
@@ -73,12 +80,13 @@ public class ThreadPool {
     }
 
     /**
-     * Запуск программы, создаем задачи и запоняем очередь.
+     * Запуск программы, создаем задачи и заполняем очередь.
      *
      * @param args - параметры запуска.
      */
     public static void main(String[] args) {
-        ThreadPool pool = new ThreadPool(4);
+        ThreadPool pool = new ThreadPool();
+        pool.start(4);
         for (int i = 0; i < 200000; i++) {
             pool.add(new Work());
             System.out.println("Добавлена новая работа № " + i);

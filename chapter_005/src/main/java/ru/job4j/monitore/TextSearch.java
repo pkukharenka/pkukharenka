@@ -21,7 +21,6 @@ public class TextSearch {
      * Очередь, в которую добавляются файлы, удовлетворяющие
      * условию по расширению файла. (.txt, .doc и т.д.)
      */
-    @GuardedBy("this")
     private Deque<File> queue;
     /**
      * Список с файлами, в которых содержится искомый текст.
@@ -67,6 +66,9 @@ public class TextSearch {
     public synchronized void addList(String fileName) {
         this.list.add(fileName);
     }
+    public synchronized int size() {
+        return this.queue.size();
+    }
 
     //Геттеры для полей класса.
     public String getExt() {
@@ -92,9 +94,8 @@ public class TextSearch {
         find.start();
         find.join();
         while (!this.queue.isEmpty()) {
-            Thread th = new TextSearchThread(this);
-            th.start();
-            th.join();
+            new TextSearchThread(this).start();
+            Thread.sleep(5);
         }
         for (String str : this.list) {
             System.out.println(str);
@@ -182,8 +183,8 @@ class TextSearchThread extends Thread {
      */
     @Override
     public void run() {
-        File file = this.search.pollQueue();
-        String input = this.textFromFile(file);
+        final File file = this.search.pollQueue();
+        final String input = this.textFromFile(file);
         if (input.matches(".*" + this.search.getText() + "+.*")) {
             this.search.addList(file.getAbsolutePath());
         }
