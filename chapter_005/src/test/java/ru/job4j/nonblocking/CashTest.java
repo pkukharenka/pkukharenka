@@ -29,7 +29,7 @@ public class CashTest {
         cash.add(new User(2, "petr"));
 
         User updated1 = new User(1, "anna");
-        User updated2 = new User(2, "denis");
+        User updated2 = new User(1, "denis");
 
         Thread th1 = new Work(cash, updated1);
         Thread th2 = new Work(cash, updated2);
@@ -41,6 +41,6 @@ public class CashTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertThat(cash.get(1).getName(), is("anna"));
+        assertThat(cash.get(1).getName(), is("denis"));
     }
 }

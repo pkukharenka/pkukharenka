@@ -39,14 +39,13 @@ public class Cash {
      * @return - true, если пользователь обновлен.
      */
     public boolean update(User user) {
-        boolean isUpdate = false;
-        AtomicInteger version = user.getVersion();
-        int next = version.get() + 1;
-        if (version.compareAndSet(version.get(), next)) {
+        int before = user.getVersion();
+        if (before == user.getVersion()) {
             cash.computeIfPresent(user.getId(), (k, v) -> user);
-            isUpdate = true;
+            return true;
+        } else {
+            throw new OptimisticException("Кто-то изменил данные");
         }
-        return isUpdate;
     }
 
     /**
