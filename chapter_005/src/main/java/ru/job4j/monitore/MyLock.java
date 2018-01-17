@@ -1,6 +1,6 @@
 package ru.job4j.monitore;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Блокировка.
@@ -13,13 +13,15 @@ public class MyLock {
     /**
      * Сотояние блокировки.
      */
-    private AtomicInteger state;
+    private AtomicBoolean state;
+    private Thread owner;
 
     /**
      * Конструктор, устанавливающий начальное состояние блокировки.
      */
     public MyLock() {
-        this.state = new AtomicInteger(0);
+        this.state = new AtomicBoolean(false);
+        this.owner = null;
     }
 
     /**
@@ -27,13 +29,27 @@ public class MyLock {
      * меняем его на 1.
      */
     public void lock() {
-        this.state.compareAndSet(0, 1);
+        if (state.compareAndSet(false, true)) {
+            this.owner = Thread.currentThread();
+        } else {
+            synchronized (this) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
-    /**
-     * Снимаем блокировку, если значение состояние 1, то
-     * меняем его на 0.
-     */
+
     public void unlock() {
-       this.state.compareAndSet(1, 0);
+        final Thread current = Thread.currentThread();
+        if (this.owner == current) {
+            this.owner = null;
+            this.state.compareAndSet(true, false);
+            synchronized (this) {
+                this.notify();
+            }
+        }
     }
 }

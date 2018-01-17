@@ -39,13 +39,15 @@ public class Cash {
      * @return - true, если пользователь обновлен.
      */
     public boolean update(User user) {
-        int before = user.getVersion();
-        if (before == user.getVersion()) {
+        int oldVersion = cash.get(user.getId()).getVersion();
+        if (oldVersion == user.getVersion()) {
+            user.setVersion(oldVersion + 1);
             cash.computeIfPresent(user.getId(), (k, v) -> user);
             return true;
         } else {
-            throw new OptimisticException("Кто-то изменил данные");
+            throw new RuntimeException("Кто-то изменил данные");
         }
+
     }
 
     /**
