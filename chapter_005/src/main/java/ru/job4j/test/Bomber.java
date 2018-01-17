@@ -38,45 +38,21 @@ public class Bomber {
      * движение моделей по горизонтали (влево либо вправо).
      *
      * @param model - модель, осуществляющая движение
-     * @param x     - положение в горизонтальной плоскости
-     * @param y     - положение в вертикальной плоскости
+     * @param dest - точка куда модель совершает движение
      * @return - true если модель успещно совершила движение
      */
-    public boolean moveX(final Model model, final int x, final int y) {
+    public boolean move(final Model model, final Dest dest) {
         boolean isMove = false;
         try {
             final int xSize = this.board[0].length - 1;
-            if (x >= 0 && x < xSize && this.board[x][y].tryLock(500, TimeUnit.MILLISECONDS)) {
-                if (this.board[model.getX()][y].isLocked()) {
-                    this.board[model.getX()][y].unlock();
+            final int ySize = this.board.length - 1;
+            final int x = dest.getX();
+            final int y = dest.getY();
+            if (x >= 0 && x < xSize && y >= 0 && y < ySize && this.board[x][y].tryLock(500, TimeUnit.MILLISECONDS)) {
+                if (this.board[model.getX()][model.getY()].isLocked()) {
+                    this.board[model.getX()][model.getY()].unlock();
                 }
                 model.setX(x);
-                isMove = true;
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return isMove;
-    }
-
-    /**
-     * Возвращает true если модель успещно совершила движение. Метод описывает
-     * движение моделей по вертикали (вверх либо вниз).
-     *
-     * @param model - модель, осуществляющая движение
-     * @param x     - положение в горизонтальной плоскости
-     * @param y     - положение в вертикальной плоскости
-     * @return - true если модель успещно совершила движение
-     */
-    public boolean moveY(final Model model, final int x, final int y) {
-        boolean isMove = false;
-        try {
-            final int ySize = this.board.length - 1;
-            if (y >= 0 && y < ySize && this.board[x][y].tryLock(500, TimeUnit.MILLISECONDS)) {
-                if (this.board[x][model.getY()].isLocked()) {
-                    this.board[x][model.getY()].unlock();
-                }
                 model.setY(y);
                 isMove = true;
                 Thread.sleep(1000);
@@ -95,7 +71,7 @@ public class Bomber {
      * @return - true если модель успещно совершила движение
      */
     public boolean moveLeft(final Model model) {
-        return this.moveX(model, model.getX() - 1, model.getY());
+        return this.move(model, new Dest(model.getX() - 1, model.getY()));
     }
 
     /**
@@ -106,7 +82,7 @@ public class Bomber {
      * @return - true если модель успещно совершила движение
      */
     public boolean moveRight(final Model model) {
-        return this.moveX(model, model.getX() + 1, model.getY());
+        return this.move(model, new Dest(model.getX() + 1, model.getY()));
     }
 
     /**
@@ -117,7 +93,7 @@ public class Bomber {
      * @return - true если модель успещно совершила движение
      */
     public boolean moveUp(final Model model) {
-        return this.moveY(model, model.getX(), model.getY() + 1);
+        return this.move(model, new Dest(model.getX(), model.getY() + 1));
     }
 
     /**
@@ -128,7 +104,7 @@ public class Bomber {
      * @return - true если модель успещно совершила движение
      */
     public boolean moveDown(final Model model) {
-        return this.moveY(model, model.getX(), model.getY() - 1);
+        return this.move(model, new Dest(model.getX(), model.getY() - 1));
     }
 
     /**
@@ -151,7 +127,6 @@ public class Bomber {
             e.printStackTrace();
         }
     }
-
 }
 
 /**
@@ -171,7 +146,7 @@ class ModelMoveThread extends Thread {
      * Конструктор для инициализации.
      *
      * @param bomber - игровое поле.
-     * @param model - модель
+     * @param model  - модель
      */
     public ModelMoveThread(Bomber bomber, Model model) {
         this.bomber = bomber;
@@ -217,5 +192,48 @@ class ModelMoveThread extends Thread {
                 }
             }
         }
+    }
+}
+
+/**
+ * Класс, описывающий точку, куда совершает движение
+ * модель игры.
+ */
+class Dest {
+    /**
+     * Положение по горизонтали.
+     */
+    private int x;
+    /**
+     * Положение по вертикали
+     */
+    private int y;
+
+    /**
+     * Конструктор инициализирующий поля.
+     *
+     * @param x - положение по горизонтали.
+     * @param y - положение по вертикали.
+     */
+    public Dest(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    //Геттеры и сеттеры.
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
