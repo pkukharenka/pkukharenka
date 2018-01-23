@@ -1,8 +1,6 @@
 package ru.job4j.test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -34,11 +32,40 @@ public class Bomber {
     }
 
     /**
+     * Метод для инициализации игры. Создает поток героя и потоки
+     * чудовищ, согласно введенного количества. Также расставляет
+     * в рандомном порядке блоки по полю игры.
+     *
+     * @param bomber - поле для игры.
+     * @param enemy  - количество чудовищ.
+     * @param blocks - количество блоков.
+     */
+    public void initGame(Bomber bomber, int enemy, int blocks) {
+        Random rn = new Random();
+        new HeroThread(bomber, new Model("hero", 0, 0)).start();
+        for (int i = 0; i < blocks; i++) {
+            int x = Math.abs(rn.nextInt(this.board.length - 1));
+            int y = Math.abs(rn.nextInt(this.board.length - 1));
+            if (!this.board[x][y].isLocked()) {
+                this.board[x][y].lock();
+            }
+        }
+        do {
+            int x = Math.abs(rn.nextInt(this.board.length - 1));
+            int y = Math.abs(rn.nextInt(this.board.length - 1));
+            if (!this.board[x][y].isLocked()) {
+                new EnemyThread(bomber, new Model("Enemy" + enemy, x, y)).start();
+                enemy--;
+            }
+        } while (enemy != 0);
+    }
+
+    /**
      * Возвращает true если модель успещно совершила движение. Метод описывает
      * движение моделей по горизонтали (влево либо вправо).
      *
      * @param model - модель, осуществляющая движение
-     * @param dest - точка куда модель совершает движение
+     * @param dest  - точка куда модель совершает движение
      * @return - true если модель успещно совершила движение
      */
     public boolean move(final Model model, final Dest dest) {
@@ -48,7 +75,7 @@ public class Bomber {
             final int ySize = this.board.length - 1;
             final int x = dest.getX();
             final int y = dest.getY();
-            if (x >= 0 && x < xSize && y >= 0 && y < ySize && this.board[x][y].tryLock(500, TimeUnit.MILLISECONDS)) {
+            if (x >= 0 && x < xSize && y >= 0 && y < ySize && this.board[x][y].tryLock(5000, TimeUnit.MILLISECONDS)) {
                 if (this.board[model.getX()][model.getY()].isLocked()) {
                     this.board[model.getX()][model.getY()].unlock();
                 }
@@ -114,126 +141,6 @@ public class Bomber {
      */
     public static void main(String[] args) {
         Bomber bomber = new Bomber(10);
-        Model hero = new Model("Герой", 0, 0);
-        Model enemy = new Model("Чудовище", 5, 5);
-        Thread th1 = new ModelMoveThread(bomber, hero);
-        Thread th2 = new ModelMoveThread(bomber, enemy);
-        th1.start();
-        th2.start();
-        try {
-            th1.join();
-            th2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-/**
- * Класс осуществляющий движение моделей
- */
-class ModelMoveThread extends Thread {
-    /**
-     * Класс игровое поле.
-     */
-    private final Bomber bomber;
-    /**
-     * Класс модели.
-     */
-    private final Model model;
-
-    /**
-     * Конструктор для инициализации.
-     *
-     * @param bomber - игровое поле.
-     * @param model  - модель
-     */
-    public ModelMoveThread(Bomber bomber, Model model) {
-        this.bomber = bomber;
-        this.model = model;
-    }
-
-    /**
-     * Метод реализующий автоматическое рандомное движение
-     * моделей. Для обеспечения рандомности используется
-     * список с цифрами от 1 до 4, каждая цифра характерезует
-     * движение влево, вправо, вверх или вниз. Перед каждым
-     * движением перемешиваем список для рандомности изъятия
-     * значений. Далее если движение под номером из списка
-     * возвращает true выходим из цикла и повторяем снова.
-     */
-    @Override
-    public void run() {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            list.add(i);
-        }
-        while (true) {
-            Collections.shuffle(list);
-            for (Integer i : list) {
-                if (i == 1 && this.bomber.moveLeft(this.model)) {
-                    System.out.println(String.format("%s совершил движение влево в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 2 && this.bomber.moveRight(this.model)) {
-                    System.out.println(String.format("%s совершил движение вправо в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 3 && this.bomber.moveUp(this.model)) {
-                    System.out.println(String.format("%s совершил движение вверх в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 4 && this.bomber.moveDown(this.model)) {
-                    System.out.println(String.format("%s совершил движение вниз в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else {
-                    break;
-                }
-            }
-        }
-    }
-}
-
-/**
- * Класс, описывающий точку, куда совершает движение
- * модель игры.
- */
-class Dest {
-    /**
-     * Положение по горизонтали.
-     */
-    private int x;
-    /**
-     * Положение по вертикали
-     */
-    private int y;
-
-    /**
-     * Конструктор инициализирующий поля.
-     *
-     * @param x - положение по горизонтали.
-     * @param y - положение по вертикали.
-     */
-    public Dest(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    //Геттеры и сеттеры.
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+        bomber.initGame(bomber, 3, 5);
     }
 }
