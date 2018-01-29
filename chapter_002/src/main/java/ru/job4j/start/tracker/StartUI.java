@@ -20,6 +20,7 @@ public class StartUI {
      */
     private Tracker tracker;
 
+    private Util util;
 
     /**
      * Конуструктор для инициализации программы.
@@ -30,15 +31,19 @@ public class StartUI {
     public StartUI(Input input, Tracker tracker) {
         this.input = input;
         this.tracker = tracker;
+        this.util = new Util();
     }
 
     /**
-     * Основной цикл программы. Производится наполнение меню
-     * программы значениями возможных функций, а также вывод
-     * меню в консоль и запрос у пользователя выбора действия.
+     * Основной цикл программы.
+     * 1. Проверяется созданы ли табоицы базы данных, если нет,
+     * то создаются.
+     * 2. Производится наполнение меню программы значениями возможных функций,
+     * а также вывод меню в консоль и запрос у пользователя выбора действия.
      */
     public void init() {
         boolean flag = false;
+        this.util.checkTable();
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
         menu.fill();
         while (!flag) {

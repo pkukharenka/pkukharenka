@@ -1,6 +1,6 @@
 package ru.job4j.start.tracker.models;
 
-import java.util.Arrays;
+import java.sql.Timestamp;
 
 /**
  * Класс, описывающий объект типа Item.
@@ -13,10 +13,17 @@ public class Item {
     private int id;
     private String name;
     private String desc;
-    private long created;
+    private Timestamp created;
     private String[] comments;
 
-    public Item(String name, String desc, long created) {
+    public Item(int id, String name, String desc, Timestamp created) {
+        this.id = id;
+        this.name = name;
+        this.desc = desc;
+        this.created = created;
+    }
+
+    public Item(String name, String desc, Timestamp created) {
         this.name = name;
         this.desc = desc;
         this.created = created;
@@ -46,11 +53,11 @@ public class Item {
         this.desc = desc;
     }
 
-    public long getCreated() {
+    public Timestamp getCreated() {
         return created;
     }
 
-    public void setCreated(long created) {
+    public void setCreated(Timestamp created) {
         this.created = created;
     }
 

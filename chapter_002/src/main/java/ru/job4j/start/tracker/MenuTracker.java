@@ -3,6 +3,7 @@ package ru.job4j.start.tracker;
 import ru.job4j.start.tracker.io.Input;
 import ru.job4j.start.tracker.models.Item;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +115,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             String name = input.ask("Введите имя автора заявки: ");
             String desc = input.ask("Введите описание заявки: ");
-            Item item = new Item(name, desc, System.currentTimeMillis());
+            Item item = new Item(name, desc, new Timestamp(System.currentTimeMillis()));
             tracker.add(item);
             System.out.println("Выполнено успешно.");
         }
