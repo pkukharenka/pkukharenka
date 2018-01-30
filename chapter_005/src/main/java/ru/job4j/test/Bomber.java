@@ -1,8 +1,11 @@
 package ru.job4j.test;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 /**
  * Игра бомбермэн.
@@ -68,7 +71,7 @@ public class Bomber {
      * @param dest  - точка куда модель совершает движение
      * @return - true если модель успещно совершила движение
      */
-    public boolean move(final Model model, final Dest dest) {
+    private boolean move(final Model model, final Dest dest) {
         boolean isMove = false;
         try {
             final int xSize = this.board[0].length - 1;
@@ -97,8 +100,14 @@ public class Bomber {
      * @param model - модель.
      * @return - true если модель успещно совершила движение
      */
-    public boolean moveLeft(final Model model) {
-        return this.move(model, new Dest(model.getX() - 1, model.getY()));
+    public Function<Integer, Boolean> moveLeft(final Model model) {
+        return number -> {
+            final boolean res = this.move(model, new Dest(model.getX() - 1, model.getY()));
+            if (res) {
+                this.msg("влево", model);
+            }
+            return res;
+        };
     }
 
     /**
@@ -108,8 +117,14 @@ public class Bomber {
      * @param model - модель.
      * @return - true если модель успещно совершила движение
      */
-    public boolean moveRight(final Model model) {
-        return this.move(model, new Dest(model.getX() + 1, model.getY()));
+    public Function<Integer, Boolean> moveRight(final Model model) {
+        return number -> {
+            final boolean res = this.move(model, new Dest(model.getX() + 1, model.getY()));
+            if (res) {
+                this.msg("вправо", model);
+            }
+            return res;
+        };
     }
 
     /**
@@ -119,8 +134,14 @@ public class Bomber {
      * @param model - модель.
      * @return - true если модель успещно совершила движение
      */
-    public boolean moveUp(final Model model) {
-        return this.move(model, new Dest(model.getX(), model.getY() + 1));
+    public Function<Integer, Boolean> moveUp(final Model model) {
+        return number -> {
+            final boolean res = this.move(model, new Dest(model.getX(), model.getY() + 1));
+            if (res) {
+                this.msg("вверх", model);
+            }
+            return res;
+        };
     }
 
     /**
@@ -130,8 +151,19 @@ public class Bomber {
      * @param model - модель.
      * @return - true если модель успещно совершила движение
      */
-    public boolean moveDown(final Model model) {
-        return this.move(model, new Dest(model.getX(), model.getY() - 1));
+    public Function<Integer, Boolean> moveDown(final Model model) {
+        return number -> {
+            final boolean res = this.move(model, new Dest(model.getX(), model.getY() - 1));
+            if (res) {
+                this.msg("вниз", model);
+            }
+            return res;
+        };
+    }
+
+    private void msg(final String side, final Model model) {
+        System.out.println(String.format("%s совершил движение %s в клетку %s - %s", model.getName(), side,
+                model.getX(), model.getY()));
     }
 
     /**
@@ -141,6 +173,6 @@ public class Bomber {
      */
     public static void main(String[] args) {
         Bomber bomber = new Bomber(10);
-        bomber.initGame(bomber, 3, 5);
+        bomber.initGame(bomber, 2, 5);
     }
 }

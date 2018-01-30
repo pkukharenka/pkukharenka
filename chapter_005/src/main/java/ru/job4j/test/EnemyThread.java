@@ -1,8 +1,7 @@
 package ru.job4j.test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Класс осуществляющий автоматическое движение
@@ -22,6 +21,8 @@ public class EnemyThread extends Thread {
      */
     private final Model model;
 
+    private final Map<Integer, Function<Integer, Boolean>> dispatch = new HashMap<>();
+
     /**
      * Конструктор для инициализации.
      *
@@ -31,6 +32,18 @@ public class EnemyThread extends Thread {
     public EnemyThread(Bomber bomber, Model model) {
         this.bomber = bomber;
         this.model = model;
+    }
+
+    private EnemyThread init() {
+        this.dispatch.put(1, this.bomber.moveLeft(this.model));
+        this.dispatch.put(2, this.bomber.moveRight(this.model));
+        this.dispatch.put(3, this.bomber.moveUp(this.model));
+        this.dispatch.put(4, this.bomber.moveDown(this.model));
+        return this;
+    }
+
+    private boolean go(final int number) {
+        return this.dispatch.get(number).apply(number);
     }
 
     /**
@@ -51,28 +64,13 @@ public class EnemyThread extends Thread {
         while (true) {
             Collections.shuffle(list);
             for (Integer i : list) {
-                if (i == 1 && this.bomber.moveLeft(this.model)) {
-                    System.out.println(String.format("%s совершил движение влево в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 2 && this.bomber.moveRight(this.model)) {
-                    System.out.println(String.format("%s совершил движение вправо в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 3 && this.bomber.moveUp(this.model)) {
-                    System.out.println(String.format("%s совершил движение вверх в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else if (i == 4 && this.bomber.moveDown(this.model)) {
-                    System.out.println(String.format("%s совершил движение вниз в клетку %s - %s", this.model.getName(),
-                            this.model.getX(), this.model.getY()));
-                    break;
-                } else {
-                    System.out.println(String.format("Ходить некуда - %s", this.model.getName()));
+                if (this.init().go(i)) {
                     break;
                 }
+                System.out.println(String.format("Ходить некуда - %s", this.model.getName()));
             }
         }
     }
-
 }
+
+
