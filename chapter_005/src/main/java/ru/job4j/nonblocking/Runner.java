@@ -12,8 +12,8 @@ public class Runner {
         Cash cash = new Cash();
         cash.add(new User(1, "ivan"));
 
-        Thread th1 = new Work(cash,"artem");
-        Thread th2 = new Work(cash,"pyotr");
+        Thread th1 = new Work(cash, "artem");
+        Thread th2 = new Work(cash, "pyotr");
         th1.start();
         th2.start();
         try {

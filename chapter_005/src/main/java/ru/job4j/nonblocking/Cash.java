@@ -29,7 +29,7 @@ public class Cash {
      * @param user - новый пользователь.
      */
     public void add(User user) {
-        cash.put(user.getId(), user);
+        this.cash.put(user.getId(), user);
     }
 
     /**
@@ -38,16 +38,13 @@ public class Cash {
      * @param user - обновленные данные.
      * @return - true, если пользователь обновлен.
      */
-    public boolean update(User user) {
-        int oldVersion = cash.get(user.getId()).getVersion();
-        if (oldVersion == user.getVersion()) {
-            user.setVersion(oldVersion + 1);
-            cash.computeIfPresent(user.getId(), (k, v) -> user);
-            return true;
-        } else {
-            throw new RuntimeException("Кто-то изменил данные");
-        }
-
+    public void update(User user) {
+        AtomicInteger oldVersion = cash.get(user.getId()).getVersion();
+        int newVersion;
+        do {
+            newVersion = oldVersion.incrementAndGet();
+            this.cash.computeIfPresent(user.getId(), (k, v) -> user);
+        } while (!oldVersion.compareAndSet(oldVersion.get(), newVersion));
     }
 
     /**
@@ -56,7 +53,7 @@ public class Cash {
      * @param id - id пользователя.
      */
     public void delete(int id) {
-        cash.remove(id);
+        this.cash.remove(id);
     }
 
     /**
@@ -66,6 +63,6 @@ public class Cash {
      * @return - пользователя
      */
     public User get(int id) {
-        return cash.get(id);
+        return this.cash.get(id);
     }
 }

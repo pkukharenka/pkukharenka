@@ -21,7 +21,7 @@ public class User {
     /**
      * Версия обновления пользователя.
      */
-    private int version;
+    private AtomicInteger version;
 
     /**
      * Конструктор для инициализации.
@@ -32,7 +32,7 @@ public class User {
     public User(int id, String name) {
         this.id = id;
         this.name = name;
-        this.version = 0;
+        this.version = new AtomicInteger(0);
     }
 
     //Геттеры, сеттеры
@@ -44,11 +44,11 @@ public class User {
         return name;
     }
 
-    public int getVersion() {
+    public AtomicInteger getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(AtomicInteger version) {
         this.version = version;
     }
 
