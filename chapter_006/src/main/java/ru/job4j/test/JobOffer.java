@@ -56,7 +56,9 @@ public class JobOffer implements Runnable {
     private int toBase() {
         Util.create();
         HashSet<Offer> offers = this.fromBase();
+        LOG.info(String.format("Всего вакансий в базе - %s.", offers.size()));
         this.valid.keySet().removeAll(offers);
+        LOG.info(String.format("Найдено новых уникальных вакансий - %s", this.valid.size()));
         try (Connection cn = Util.getConnection()) {
             cn.setAutoCommit(false);
             PreparedStatement ps = cn.prepareStatement("INSERT INTO offer (title, content, create_date, url) VALUES (?, ?, ?, ?)");
@@ -81,6 +83,7 @@ public class JobOffer implements Runnable {
      * @return - список записей
      */
     private HashSet<Offer> fromBase() {
+        LOG.info("Извлекаем данные из базы...");
         HashSet<Offer> offers = new HashSet<>(100);
         try (
                 Connection cn = Util.getConnection();
@@ -91,7 +94,7 @@ public class JobOffer implements Runnable {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String text = rs.getString("content");
-                LocalDate date = (LocalDate) rs.getObject("create_date");
+                LocalDate date = LocalDate.parse(rs.getString("create_date"));
                 String link = rs.getString("url");
                 offers.add(new Offer(id, title, text, date, link));
             }
@@ -121,11 +124,13 @@ public class JobOffer implements Runnable {
         List<Callable<String>> tasks = this.fillTasks(pages);
         try {
             if (executor.invokeAll(tasks).stream().map(Future::isDone).count() == pages) {
+                LOG.info(String.format("Все потоки отработали, закрываем пул. Найдено вакансий - %s", this.valid.size()));
                 executor.shutdown();
                 int newOffer = 0;
                 if (this.valid.size() > 0) {
                     newOffer = this.toBase();
                 }
+                LOG.info("Обновляем последнюю дату запуска");
                 Util.updateProperty(LocalDate.now().minusDays(1));
                 LOG.info(String.format("Добавлено новых записей - %s. Конец работы - %s", newOffer, LocalDateTime.now().toString()));
             }
@@ -142,7 +147,7 @@ public class JobOffer implements Runnable {
      */
     private List<Callable<String>> fillTasks(int pages) {
         List<Callable<String>> tasks = new ArrayList<>();
-        LOG.info(String.valueOf(pages));
+        LOG.info(String.format("Количество страниц для обработки - %s", String.valueOf(pages)));
         for (int i = 1; i <= pages; i++) {
             tasks.add(new Parser(String.format("%s%s", URL, i), this));
         }

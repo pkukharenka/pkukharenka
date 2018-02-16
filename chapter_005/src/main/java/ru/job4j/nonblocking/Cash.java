@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Неблокирующий кэш для хранения пользователей
  *
  * @author Pyotr Kukharenka
- * @since 09.01.2018
+ * @since 16.02.2018
  */
 
 public class Cash {
@@ -39,12 +39,14 @@ public class Cash {
      * @return - true, если пользователь обновлен.
      */
     public void update(User user) {
-        AtomicInteger oldVersion = cash.get(user.getId()).getVersion();
-        int newVersion;
-        do {
-            newVersion = oldVersion.incrementAndGet();
-            this.cash.computeIfPresent(user.getId(), (k, v) -> user);
-        } while (!oldVersion.compareAndSet(oldVersion.get(), newVersion));
+        this.cash.computeIfPresent(user.getId(), (k, v) -> {
+            int old = v.getVersion();
+            if (old != user.getVersion()) {
+                throw new RuntimeException("Версия объекта была изменена");
+            }
+            user.setVersion(old + 1);
+            return user;
+        });
     }
 
     /**
