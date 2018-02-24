@@ -27,12 +27,11 @@ public class UsersStoreTest {
         assertThat(store.get(ids).getName(), is("petr"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void deleteUser() {
         UserStore store = UserStore.getInstance();
         final int ids = store.add(new Users("vitaliy", "vitaliy1989", "vit@mail.ru"));
-        store.delete(ids);
-        store.get(ids);
+        assertTrue(store.delete(ids));
     }
 
 }

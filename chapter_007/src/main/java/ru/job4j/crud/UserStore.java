@@ -1,5 +1,6 @@
 package ru.job4j.crud;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class UserStore implements Store {
     /**
      * Соединене с базой данных
      */
-    private final Connection connection;
+    private final BasicDataSource dataSource;
 
     /**
      * Приватный конструктор для инициализации подключения
@@ -38,17 +39,12 @@ public class UserStore implements Store {
      */
     private UserStore() {
         final Settings settings = Settings.getInstance();
-        try {
-            Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection(
-                    settings.property("url"),
-                    settings.property("name"),
-                    settings.property("password")
-            );
-        } catch (SQLException | ClassNotFoundException e) {
-            LOG.error(e.getMessage(), e);
-            throw new IllegalStateException("Соединение с базой данных не установлено.");
-        }
+        this.dataSource = new BasicDataSource();
+        this.dataSource.setUrl(settings.property("url"));
+        this.dataSource.setUsername(settings.property("name"));
+        this.dataSource.setPassword(settings.property("password"));
+        this.dataSource.setDriverClassName(settings.property("driver"));
+        this.dataSource.setMaxIdle(10);
     }
 
     /**
@@ -68,7 +64,7 @@ public class UserStore implements Store {
     @Override
     public Collection<Users> getAll() {
         final List<Users> users = new ArrayList<>(100);
-        try (Statement st = connection.createStatement();
+        try (Statement st = this.dataSource.getConnection().createStatement();
              ResultSet rs = st.executeQuery("SELECT * FROM users")) {
             while (rs.next()) {
                 users.add(new Users(
@@ -94,7 +90,7 @@ public class UserStore implements Store {
      */
     @Override
     public int add(Users user) {
-        try (PreparedStatement pst = connection.prepareStatement(
+        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement(
                 "INSERT INTO users (name, login, email, create_date) VALUES (?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS)
         ) {
@@ -122,7 +118,7 @@ public class UserStore implements Store {
      */
     @Override
     public boolean update(Users user) {
-        try (PreparedStatement pst = connection.prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
+        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
             pst.setString(3, user.getEmail());
@@ -143,7 +139,7 @@ public class UserStore implements Store {
      */
     @Override
     public boolean delete(int id) {
-        try (PreparedStatement pst = connection.prepareStatement("DELETE FROM users WHERE id=?")) {
+        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("DELETE FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeUpdate();
             return true;
@@ -155,23 +151,25 @@ public class UserStore implements Store {
 
     /**
      * Возвращает пользователя с требуемым id.
+     *
      * @param id - id искомого пользователя
      * @return - пользователя с требуемым id.
      */
     @Override
     public Users get(int id) {
-        try (PreparedStatement pst = connection.prepareStatement("SELECT * FROM users WHERE id=?")) {
+        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("SELECT * FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeQuery();
-            ResultSet rs = pst.getResultSet();
-            if (rs.next()) {
-                return new Users(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("login"),
-                        rs.getString("email"),
-                        LocalDate.parse(rs.getString("create_date"))
-                );
+            try (ResultSet rs = pst.getResultSet()) {
+                if (rs.next()) {
+                    return new Users(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("login"),
+                            rs.getString("email"),
+                            LocalDate.parse(rs.getString("create_date"))
+                    );
+                }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
