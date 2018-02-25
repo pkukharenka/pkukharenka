@@ -1,4 +1,6 @@
-package ru.job4j.crud;
+package ru.job4j.crud.dao;
+
+import ru.job4j.crud.model.Users;
 
 import java.util.Collection;
 

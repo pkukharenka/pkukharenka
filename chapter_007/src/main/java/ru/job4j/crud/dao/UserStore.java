@@ -1,8 +1,10 @@
-package ru.job4j.crud;
+package ru.job4j.crud.dao;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.crud.Settings;
+import ru.job4j.crud.model.Users;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -44,7 +46,6 @@ public class UserStore implements Store {
         this.dataSource.setUsername(settings.property("name"));
         this.dataSource.setPassword(settings.property("password"));
         this.dataSource.setDriverClassName(settings.property("driver"));
-        this.dataSource.setMaxIdle(10);
     }
 
     /**
@@ -64,7 +65,8 @@ public class UserStore implements Store {
     @Override
     public Collection<Users> getAll() {
         final List<Users> users = new ArrayList<>(100);
-        try (Statement st = this.dataSource.getConnection().createStatement();
+        try (Connection cn = this.dataSource.getConnection();
+             Statement st = cn.createStatement();
              ResultSet rs = st.executeQuery("SELECT * FROM users")) {
             while (rs.next()) {
                 users.add(new Users(
@@ -75,10 +77,11 @@ public class UserStore implements Store {
                         LocalDate.parse(rs.getString("create_date"))
                 ));
             }
+            return users;
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return users;
+        throw new IllegalStateException("Ошибка выборки");
     }
 
     /**
@@ -90,9 +93,10 @@ public class UserStore implements Store {
      */
     @Override
     public int add(Users user) {
-        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement(
-                "INSERT INTO users (name, login, email, create_date) VALUES (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS)
+        try (Connection cn = this.dataSource.getConnection();
+             PreparedStatement pst = cn.prepareStatement(
+                     "INSERT INTO users (name, login, email, create_date) VALUES (?, ?, ?, ?)",
+                     Statement.RETURN_GENERATED_KEYS)
         ) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
@@ -118,7 +122,8 @@ public class UserStore implements Store {
      */
     @Override
     public boolean update(Users user) {
-        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
+        try (Connection cn = this.dataSource.getConnection();
+             PreparedStatement pst = cn.prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
             pst.setString(3, user.getEmail());
@@ -139,7 +144,8 @@ public class UserStore implements Store {
      */
     @Override
     public boolean delete(int id) {
-        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("DELETE FROM users WHERE id=?")) {
+        try (Connection cn = this.dataSource.getConnection();
+             PreparedStatement pst = cn.prepareStatement("DELETE FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeUpdate();
             return true;
@@ -157,7 +163,8 @@ public class UserStore implements Store {
      */
     @Override
     public Users get(int id) {
-        try (PreparedStatement pst = this.dataSource.getConnection().prepareStatement("SELECT * FROM users WHERE id=?")) {
+        try (Connection cn = this.dataSource.getConnection();
+             PreparedStatement pst = cn.prepareStatement("SELECT * FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeQuery();
             try (ResultSet rs = pst.getResultSet()) {

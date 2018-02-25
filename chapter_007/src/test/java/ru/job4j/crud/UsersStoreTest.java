@@ -1,8 +1,8 @@
 package ru.job4j.crud;
 
 import org.junit.Test;
-
-import java.time.LocalDate;
+import ru.job4j.crud.model.Users;
+import ru.job4j.crud.dao.UserStore;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -32,6 +32,7 @@ public class UsersStoreTest {
         UserStore store = UserStore.getInstance();
         final int ids = store.add(new Users("vitaliy", "vitaliy1989", "vit@mail.ru"));
         assertTrue(store.delete(ids));
+
     }
 
 }

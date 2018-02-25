@@ -1,4 +1,4 @@
-package ru.job4j.crud;
+package ru.job4j.crud.model;
 
 import java.time.LocalDate;
 
@@ -66,6 +66,10 @@ public class Users {
 
     public String getEmail() {
         return email;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
     public void setName(String name) {
