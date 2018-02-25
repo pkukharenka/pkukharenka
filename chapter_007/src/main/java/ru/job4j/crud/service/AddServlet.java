@@ -1,7 +1,5 @@
 package ru.job4j.crud.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.job4j.crud.dao.UserStore;
 import ru.job4j.crud.model.Users;
 
@@ -10,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Сервлет для добавления пользователя
@@ -21,7 +18,6 @@ import java.io.PrintWriter;
 
 public class AddServlet extends HttpServlet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddServlet.class);
     private final UserStore store = UserStore.getInstance();
 
     @Override
@@ -32,6 +28,6 @@ public class AddServlet extends HttpServlet {
                         req.getParameter("email")
                 )
         );
-        resp.sendRedirect(String.format("%s/crud", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
     }
 }
