@@ -1,18 +1,18 @@
 package ru.job4j.crud;
 
 import org.junit.Test;
-import ru.job4j.crud.model.Users;
+import ru.job4j.crud.model.User;
 import ru.job4j.crud.dao.UserStore;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-public class UsersStoreTest {
+public class UserStoreTest {
 
     @Test
     public void addUser() {
         UserStore store = UserStore.getInstance();
-        Users user = new Users("ivan", "iivanov", "ivanov@mail.ru");
+        User user = new User("ivan", "iivanov", "ivanov@mail.ru");
         final int ids = store.add(user);
         assertThat(store.get(ids).getName(), is(user.getName()));
     }
@@ -20,8 +20,8 @@ public class UsersStoreTest {
     @Test
     public void updateUser() {
         UserStore store = UserStore.getInstance();
-        final int ids = store.add(new Users("artem", "artmiy2007", "artem@mail.ru"));
-        Users user = store.get(ids);
+        final int ids = store.add(new User("artem", "artmiy2007", "artem@mail.ru"));
+        User user = store.get(ids);
         user.setName("petr");
         store.update(user);
         assertThat(store.get(ids).getName(), is("petr"));
@@ -30,8 +30,8 @@ public class UsersStoreTest {
     @Test
     public void deleteUser() {
         UserStore store = UserStore.getInstance();
-        final int ids = store.add(new Users("vitaliy", "vitaliy1989", "vit@mail.ru"));
-        assertTrue(store.delete(ids));
+        final int ids = store.add(new User("vitaliy", "vitaliy1989", "vit@mail.ru"));
+        assertThat(store.delete(ids), is(ids));
 
     }
 

@@ -1,7 +1,7 @@
 package ru.job4j.crud.service;
 
 import ru.job4j.crud.dao.UserStore;
-import ru.job4j.crud.model.Users;
+import ru.job4j.crud.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,11 +23,11 @@ public class AddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.store.add(
-                new Users(req.getParameter("name"),
+                new User(req.getParameter("name"),
                         req.getParameter("login"),
                         req.getParameter("email")
                 )
         );
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

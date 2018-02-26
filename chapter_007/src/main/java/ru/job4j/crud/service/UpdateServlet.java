@@ -1,7 +1,7 @@
 package ru.job4j.crud.service;
 
 import ru.job4j.crud.dao.UserStore;
-import ru.job4j.crud.model.Users;
+import ru.job4j.crud.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,18 +22,20 @@ public class UpdateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("update.jsp").forward(req, resp);
+        User user = this.store.get(Integer.parseInt(req.getParameter("id")));
+        req.setAttribute("user", user);
+        req.getRequestDispatcher("WEB-INF/views/update.jsp").forward(req, resp);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.store.update(new Users(
+        this.store.update(new User(
                 Integer.parseInt(req.getParameter("id")),
                 req.getParameter("name"),
                 req.getParameter("login"),
                 req.getParameter("email")
         ));
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

@@ -22,6 +22,6 @@ public class DelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.store.delete(Integer.parseInt(req.getParameter("id")));
-        resp.sendRedirect(String.format("%s/index.jsp", req.getContextPath()));
+        req.getRequestDispatcher("WEB-INF/views/").forward(req, resp);
     }
 }

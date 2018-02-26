@@ -1,8 +1,6 @@
 package ru.job4j.crud.dao;
 
-import ru.job4j.crud.model.Users;
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Базовый интерфейс, описывающий основные методы
@@ -11,15 +9,15 @@ import java.util.Collection;
  * @author Pyotr Kukharenka
  * @since 19.02.2018
  */
-public interface Store {
+public interface Store<T> {
 
-    Collection<Users> getAll();
+    List<T> findAll();
 
-    int add(Users user);
+    int add(T object);
 
-    boolean update(Users user);
+    int update(T object);
 
-    boolean delete(int id);
+    int delete(int id);
 
-    Users get(int id);
+    T get(int id);
 }

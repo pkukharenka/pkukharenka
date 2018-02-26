@@ -4,12 +4,11 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.crud.Settings;
-import ru.job4j.crud.model.Users;
+import ru.job4j.crud.model.User;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
  * @since 21.02.2018
  */
 
-public class UserStore implements Store {
+public class UserStore implements Store<User> {
     /**
      * Логгер
      */
@@ -63,13 +62,13 @@ public class UserStore implements Store {
      * @return - список всех пользователей.
      */
     @Override
-    public Collection<Users> getAll() {
-        final List<Users> users = new ArrayList<>(100);
+    public List<User> findAll() {
+        final List<User> users = new ArrayList<>();
         try (Connection cn = this.dataSource.getConnection();
              Statement st = cn.createStatement();
              ResultSet rs = st.executeQuery("SELECT * FROM users")) {
             while (rs.next()) {
-                users.add(new Users(
+                users.add(new User(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("login"),
@@ -77,11 +76,11 @@ public class UserStore implements Store {
                         LocalDate.parse(rs.getString("create_date"))
                 ));
             }
-            return users;
+            LOG.info("Найдено пользователей - {}", users.size());
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        throw new IllegalStateException("Ошибка выборки");
+        return users;
     }
 
     /**
@@ -92,7 +91,8 @@ public class UserStore implements Store {
      * @return - id пользователя.
      */
     @Override
-    public int add(Users user) {
+    public int add(User user) {
+        int newUserId = 0;
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement(
                      "INSERT INTO users (name, login, email, create_date) VALUES (?, ?, ?, ?)",
@@ -105,13 +105,14 @@ public class UserStore implements Store {
             pst.executeUpdate();
             try (ResultSet rs = pst.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getInt("id");
+                    newUserId = rs.getInt("id");
                 }
             }
+            LOG.info("Пользователь с id = {} добавлен", newUserId);
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        throw new IllegalStateException("Невозможно создать пользователя");
+        return newUserId;
     }
 
     /**
@@ -121,7 +122,7 @@ public class UserStore implements Store {
      * @return - true, если данные пользователя отредактированы.
      */
     @Override
-    public boolean update(Users user) {
+    public int update(User user) {
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
             pst.setString(1, user.getName());
@@ -129,11 +130,11 @@ public class UserStore implements Store {
             pst.setString(3, user.getEmail());
             pst.setInt(4, user.getId());
             pst.executeUpdate();
-            return true;
+            LOG.info("Пользователь с id = {} обновлен", user.getId());
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        throw new IllegalStateException("Пользователя с таким ID не существует");
+        return user.getId();
     }
 
     /**
@@ -143,16 +144,16 @@ public class UserStore implements Store {
      * @return - true, если пользователь удален.
      */
     @Override
-    public boolean delete(int id) {
+    public int delete(int id) {
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("DELETE FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeUpdate();
-            return true;
+            LOG.info("Пользователь с id = {} удален", id);
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        throw new IllegalStateException("Пользователя с таким ID не существует");
+        return id;
     }
 
     /**
@@ -162,14 +163,15 @@ public class UserStore implements Store {
      * @return - пользователя с требуемым id.
      */
     @Override
-    public Users get(int id) {
+    public User get(int id) {
+        User user = null;
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("SELECT * FROM users WHERE id=?")) {
             pst.setInt(1, id);
             pst.executeQuery();
             try (ResultSet rs = pst.getResultSet()) {
                 if (rs.next()) {
-                    return new Users(
+                    user = new User(
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("login"),
@@ -181,6 +183,15 @@ public class UserStore implements Store {
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        throw new IllegalStateException("Пользователя с таким ID не существует.");
+        return user;
+    }
+
+    public void closeData() {
+        try {
+            this.dataSource.close();
+            LOG.info("Датасорс закрыт - {}", this.dataSource.isClosed());
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 }

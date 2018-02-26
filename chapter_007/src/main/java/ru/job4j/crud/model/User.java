@@ -9,7 +9,7 @@ import java.time.LocalDate;
  * @since 21.02.2018
  */
 
-public class Users {
+public class User {
     /**
      * Уникальный id пользователя
      */
@@ -31,7 +31,7 @@ public class Users {
      */
     private LocalDate createDate;
 
-    public Users(int id, String name, String login, String email, LocalDate createDate) {
+    public User(int id, String name, String login, String email, LocalDate createDate) {
         this.id = id;
         this.name = name;
         this.login = login;
@@ -39,14 +39,14 @@ public class Users {
         this.createDate = createDate;
     }
 
-    public Users(int id, String name, String login, String email) {
+    public User(int id, String name, String login, String email) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.email = email;
     }
 
-    public Users(String name, String login, String email) {
+    public User(String name, String login, String email) {
         this.name = name;
         this.login = login;
         this.email = email;
@@ -78,7 +78,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{"
+        return "User{"
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", login='" + login + '\''
