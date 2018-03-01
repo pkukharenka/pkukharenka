@@ -8,15 +8,32 @@
 <body>
 <h1>User crud</h1>
 <br>
-<form action="${pageContext.request.contextPath}/add" method="post">
-    Name: <input type="text" name="name"><br>
-    Login: <input type="text" name="login"><br>
-    Email: <input type="text" name="email"><br>
-    <input type="submit" value="Add User">
-</form>
-<br>
+<c:if test="${empty user}">
+    <form action="${pageContext.request.contextPath}/crud" method="post">
+        <input type="hidden" name="command" value="add">
+        Name: <input type="text" name="name"><br>
+        Login: <input type="text" name="login"><br>
+        Email: <input type="text" name="email"><br>
+        <input type="submit" value="Add User">
+    </form>
+</c:if>
+
+<c:if test="${not empty user}">
+    <form action="${pageContext.request.contextPath}/crud" method="post">
+        <input type="hidden" name="command" value="update">
+        <input type="text" name="id" value="<c:out value="${user.id}"/>" hidden>
+        Updating user with id - <c:out value="${user.id}"/>
+        <br>
+        Name: <input type="text" name="name" value="<c:out value="${user.name}"/>"><br>
+        Login: <input type="text" name="login" value="<c:out value="${user.login}"/>"><br>
+        Email: <input type="text" name="email" value="<c:out value="${user.email}"/>"><br>
+        <input type="submit" value="Update User">
+    </form>
+</c:if>
+<hr>
+<hr>
 <h2>List of users</h2>
-<table>
+<table border="1">
     <tr>
         <th>Id</th>
         <th>User name</th>
@@ -33,8 +50,19 @@
             <td><c:out value="${user.login}"/></td>
             <td><c:out value="${user.email}"/></td>
             <td><c:out value="${user.createDate}"/></td>
-            <td><a href="${pageContext.request.contextPath}/update?id=<c:out value="${user.id}"/>">update</a></td>
-            <td><a href="${pageContext.request.contextPath}/del?id=<c:out value="${user.id}"/>">delete</a></td>
+            <td align="center">
+                <form action="${pageContext.request.contextPath}/crud" method="post" >
+                    <input type="hidden" name="command" value="fillUpdate">
+                    <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
+                    <input type="submit" value="update">
+                </form>
+            </td>
+            <td align="center">
+                <form action="${pageContext.request.contextPath}/crud" method="post">
+                    <input type="hidden" name="command" value="del">
+                    <input type="hidden" name="id" value="<c:out value="${user.id}"/>">
+                    <input type="submit" value="delete">
+                </form>
         </tr>
     </c:forEach>
 

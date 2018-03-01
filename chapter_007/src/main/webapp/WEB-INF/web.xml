@@ -9,20 +9,10 @@
         <servlet-class>ru.job4j.echo.EchoServlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>AddServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.service.AddServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>DelServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.service.DelServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>UpdateServlet</servlet-name>
-        <servlet-class>ru.job4j.crud.service.UpdateServlet</servlet-class>
-    </servlet>
+    <servlet-mapping>
+        <servlet-name>EchoServlet</servlet-name>
+        <url-pattern>/echo</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>UserServlet</servlet-name>
@@ -30,27 +20,11 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>EchoServlet</servlet-name>
-        <url-pattern>/echo</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AddServlet</servlet-name>
-        <url-pattern>/add</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>DelServlet</servlet-name>
-        <url-pattern>/del</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>UpdateServlet</servlet-name>
-        <url-pattern>/update</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/crud</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/views/welcome.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

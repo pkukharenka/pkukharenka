@@ -66,7 +66,7 @@ public class UserStore implements Store<User> {
         final List<User> users = new ArrayList<>();
         try (Connection cn = this.dataSource.getConnection();
              Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM users")) {
+             ResultSet rs = st.executeQuery("SELECT * FROM users ORDER BY id")) {
             while (rs.next()) {
                 users.add(new User(
                         rs.getInt("id"),
