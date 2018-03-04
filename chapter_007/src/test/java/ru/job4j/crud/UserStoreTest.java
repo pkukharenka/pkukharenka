@@ -1,6 +1,7 @@
 package ru.job4j.crud;
 
 import org.junit.Test;
+import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 import ru.job4j.crud.dao.UserStore;
 
@@ -11,16 +12,16 @@ public class UserStoreTest {
 
     @Test
     public void addUser() {
-        UserStore store = UserStore.getInstance();
-        User user = new User("ivan", "iivanov", "ivanov@mail.ru");
+        UserStore store = new UserStore();
+        User user = new User("ivan", "iivanov", "123", "ivanov@mail.ru", new Role(1, "admin"));
         final int ids = store.add(user);
         assertThat(store.get(ids).getName(), is(user.getName()));
     }
 
     @Test
     public void updateUser() {
-        UserStore store = UserStore.getInstance();
-        final int ids = store.add(new User("artem", "artmiy2007", "artem@mail.ru"));
+        UserStore store = new UserStore();
+        final int ids = store.add(new User("artem", "artmiy2007", "123", "artem@mail.ru", new Role(2, "user")));
         User user = store.get(ids);
         user.setName("petr");
         store.update(user);
@@ -29,8 +30,8 @@ public class UserStoreTest {
 
     @Test
     public void deleteUser() {
-        UserStore store = UserStore.getInstance();
-        final int ids = store.add(new User("vitaliy", "vitaliy1989", "vit@mail.ru"));
+        UserStore store = new UserStore();
+        final int ids = store.add(new User("vitaliy", "vitaliy1989", "123", "vit@mail.ru", new Role(2, "user")));
         assertThat(store.delete(ids), is(ids));
 
     }

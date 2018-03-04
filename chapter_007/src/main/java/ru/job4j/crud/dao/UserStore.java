@@ -1,9 +1,9 @@
 package ru.job4j.crud.dao;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.crud.Settings;
+import ru.job4j.crud.util.DbConnect;
+import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 
 import java.sql.*;
@@ -13,8 +13,6 @@ import java.util.List;
 
 /**
  * Класс описывает слой работы системы с базой данных.
- * Инициализация подключения реализована за счет паттерна
- * Синглтон.
  *
  * @author Pyotr Kukharenka
  * @since 21.02.2018
@@ -25,36 +23,8 @@ public class UserStore implements Store<User> {
      * Логгер
      */
     private static final Logger LOG = LoggerFactory.getLogger(UserStore.class);
-    /**
-     * Инстанс класса.
-     */
-    private static final UserStore INSTANCE = new UserStore();
-    /**
-     * Соединене с базой данных
-     */
-    private final BasicDataSource dataSource;
 
-    /**
-     * Приватный конструктор для инициализации подключения
-     * к базе данных
-     */
-    private UserStore() {
-        final Settings settings = Settings.getInstance();
-        this.dataSource = new BasicDataSource();
-        this.dataSource.setUrl(settings.property("url"));
-        this.dataSource.setUsername(settings.property("name"));
-        this.dataSource.setPassword(settings.property("password"));
-        this.dataSource.setDriverClassName(settings.property("driver"));
-    }
-
-    /**
-     * Инициализация инстанса.
-     *
-     * @return - инстанс класса.
-     */
-    public static UserStore getInstance() {
-        return INSTANCE;
-    }
+    private final DbConnect dataSource = DbConnect.getInstance();
 
     /**
      * Возвращает список всех пользователей.
@@ -66,17 +36,18 @@ public class UserStore implements Store<User> {
         final List<User> users = new ArrayList<>();
         try (Connection cn = this.dataSource.getConnection();
              Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM users ORDER BY id")) {
+             ResultSet rs = st.executeQuery("SELECT * FROM users AS u LEFT JOIN role AS r ON u.role_id=r.id ORDER BY u.id")) {
             while (rs.next()) {
                 users.add(new User(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("login"),
+                        rs.getString("password"),
                         rs.getString("email"),
-                        LocalDate.parse(rs.getString("create_date"))
+                        LocalDate.parse(rs.getString("create_date")),
+                        new Role(rs.getInt("role_id"), rs.getString("type"))
                 ));
             }
-            LOG.info("Найдено пользователей - {}", users.size());
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
@@ -90,18 +61,19 @@ public class UserStore implements Store<User> {
      * @param user - новый пользователю
      * @return - id пользователя.
      */
-    @Override
     public int add(User user) {
         int newUserId = 0;
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement(
-                     "INSERT INTO users (name, login, email, create_date) VALUES (?, ?, ?, ?)",
+                     "INSERT INTO users (name, login, email, create_date, password, role_id) VALUES (?, ?, ?, ?, ?, ?)",
                      Statement.RETURN_GENERATED_KEYS)
         ) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
             pst.setString(3, user.getEmail());
             pst.setDate(4, Date.valueOf(LocalDate.now()));
+            pst.setString(5, user.getPassword());
+            pst.setInt(6, user.getRole().getId());
             pst.executeUpdate();
             try (ResultSet rs = pst.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -121,14 +93,15 @@ public class UserStore implements Store<User> {
      * @param user - отредактированный пользовател.
      * @return - true, если данные пользователя отредактированы.
      */
-    @Override
     public int update(User user) {
         try (Connection cn = this.dataSource.getConnection();
-             PreparedStatement pst = cn.prepareStatement("UPDATE users SET name=?, login=?, email=? WHERE id=?")) {
+             PreparedStatement pst = cn.prepareStatement("UPDATE users SET name=?, login=?, email=?, password=?, role_id=? WHERE id=?")) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
             pst.setString(3, user.getEmail());
-            pst.setInt(4, user.getId());
+            pst.setString(4, user.getPassword());
+            pst.setInt(5, user.getRole().getId());
+            pst.setInt(6, user.getId());
             pst.executeUpdate();
             LOG.info("Пользователь с id = {} обновлен", user.getId());
         } catch (SQLException e) {
@@ -143,7 +116,6 @@ public class UserStore implements Store<User> {
      * @param id - id удаляемого пользователя
      * @return - true, если пользователь удален.
      */
-    @Override
     public int delete(int id) {
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("DELETE FROM users WHERE id=?")) {
@@ -162,11 +134,10 @@ public class UserStore implements Store<User> {
      * @param id - id искомого пользователя
      * @return - пользователя с требуемым id.
      */
-    @Override
     public User get(int id) {
         User user = null;
         try (Connection cn = this.dataSource.getConnection();
-             PreparedStatement pst = cn.prepareStatement("SELECT * FROM users WHERE id=?")) {
+             PreparedStatement pst = cn.prepareStatement("SELECT * FROM users AS u LEFT JOIN role AS r ON u.role_id=r.id WHERE u.id=?")) {
             pst.setInt(1, id);
             pst.executeQuery();
             try (ResultSet rs = pst.getResultSet()) {
@@ -175,8 +146,10 @@ public class UserStore implements Store<User> {
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("login"),
+                            rs.getString("password"),
                             rs.getString("email"),
-                            LocalDate.parse(rs.getString("create_date"))
+                            LocalDate.parse(rs.getString("create_date")),
+                            new Role(rs.getInt("role_id"), rs.getString("type"))
                     );
                 }
             }
@@ -186,12 +159,4 @@ public class UserStore implements Store<User> {
         return user;
     }
 
-    public void closeData() {
-        try {
-            this.dataSource.close();
-            LOG.info("Датасорс закрыт - {}", this.dataSource.isClosed());
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        }
-    }
 }

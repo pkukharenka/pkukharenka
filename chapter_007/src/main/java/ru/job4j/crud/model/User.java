@@ -10,26 +10,32 @@ import java.time.LocalDate;
  */
 
 public class User {
-    /**
-     * Уникальный id пользователя
-     */
+
     private int id;
-    /**
-     * Имя пользователя
-     */
     private String name;
-    /**
-     * Логин пользователя
-     */
     private String login;
-    /**
-     * Почтовый адрес пользователя
-     */
+    private String password;
     private String email;
-    /**
-     * Дата создания пользователя
-     */
     private LocalDate createDate;
+    private Role role;
+
+    public User(int id, String name, String login, String password, String email, LocalDate createDate, Role role) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.createDate = createDate;
+        this.role = role;
+    }
+
+    public User(String name, String login, String password, String email, Role role) {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
     public User(int id, String name, String login, String email, LocalDate createDate) {
         this.id = id;
@@ -39,17 +45,21 @@ public class User {
         this.createDate = createDate;
     }
 
-    public User(int id, String name, String login, String email) {
+    public User(int id, String name, String login, String email, Role role) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.email = email;
+        this.role = role;
     }
 
-    public User(String name, String login, String email) {
+    public User(int id, String name, String login, String password, String email, Role role) {
+        this.id = id;
         this.name = name;
         this.login = login;
+        this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public int getId() {
@@ -72,18 +82,45 @@ public class User {
         return createDate;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public String toString() {
-        return "User{"
-                + "id=" + id
-                + ", name='" + name + '\''
-                + ", login='" + login + '\''
-                + ", email='" + email + '\''
-                + ", createDate=" + createDate
-                + '}';
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        if (id != user.id) {
+            return false;
+        }
+        if (login != null ? !login.equals(user.login) : user.login != null) {
+            return false;
+        }
+        return password != null ? password.equals(user.password) : user.password == null;
     }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
+    }
+
+
 }

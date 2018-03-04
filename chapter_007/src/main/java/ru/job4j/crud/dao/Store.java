@@ -13,11 +13,4 @@ public interface Store<T> {
 
     List<T> findAll();
 
-    int add(T object);
-
-    int update(T object);
-
-    int delete(int id);
-
-    T get(int id);
 }
