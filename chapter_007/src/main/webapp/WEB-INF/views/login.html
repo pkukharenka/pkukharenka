@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/css/application.css">
+
+    <title>Login page</title>
+</head>
+<body id="loginBody">
+<br>
+<br>
+<br>
+<form autocomplete="false">
+    <div class="col-4 align-self-center ml-auto">
+        <div class="col-sm-9" id="mainDivLogin">
+            <div class="input-group" id="loginGroup">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fa fa-user fa-fw"></i>
+                    </div>
+                </div>
+                <input autocomplete="off" type="text" class="form-control" id="login" placeholder="Enter email" value=""
+                       required>
+            </div>
+        </div>
+        <div class="col-sm-9" id="mainDivPass">
+            <div class="input-group" id="passGroup">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fa fa-lock fa-fw"></i>
+                    </div>
+                </div>
+                <input type="password" class="form-control" id="pass" placeholder="Password" required>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-dark" onclick="tryLogin()">Submit</button>
+        </div>
+    </div>
+</form>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/resources/js/popper.min.js"></script>
+<script src="/resources/js/bootstrap.min.js"></script>
+<script src="/resources/js/application.js"></script>
+
+</body>
+</html>

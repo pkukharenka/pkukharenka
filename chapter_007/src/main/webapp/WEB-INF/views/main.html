@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/css/application.css">
+
+    <title>Hello, world!</title>
+
+
+</head>
+<body id="mainBody">
+<header>
+    <div class="sticky-wrapper">
+        <ul class="nav nav-tabs">
+            <li class="nav-item dropdown" id="userMenu">
+
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div id="newModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update user information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input hidden id="id" type="text" class="form-control">
+                    <div class="form-group row">
+                        <label class="col-sm-2">Name</label>
+                        <div class="col-sm-10">
+                            <input id="nameInput" type="text" class="form-control" placeholder="Username" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">Login</label>
+                        <div class="col-sm-10">
+                            <input id="loginInput" type="text" class="form-control" placeholder="Login" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">Password</label>
+                        <div class="col-sm-10">
+                            <input id="passInput" type="text" class="form-control" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">Email</label>
+                        <div class="col-sm-10">
+                            <input id="emailInput" type="email" class="form-control" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="roleDiv" hidden>
+                        <label class="col-sm-2">Role</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="roleSelect">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">Country</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="countrySelect" onchange="fillCityByCountry()">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">City</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="citySelect">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <button id="submitModal" type="button" class="btn btn-dark"
+                                    onclick="sendData('save')">Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-8" id="usersTable">
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/resources/js/popper.min.js"></script>
+<script src="/resources/js/bootstrap.min.js"></script>
+<script src="/resources/js/application.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax('./json', {
+            method: 'post',
+            dataType: 'json',
+            data: {'command': 'getUser'},
+            complete: function (data) {
+                console.log(JSON.parse(data.responseText));
+                const user = JSON.parse(data.responseText);
+                let menu = ($("<a class='nav-link dropdown-toggle' " +
+                    "data-toggle='dropdown' href='#' role='button' " +
+                    "aria-haspopup='true' aria-expanded='false' id='logo'>").text(user.name)).appendTo($('#userMenu'));
+                if (user.role.type === 'Администратор') {
+                    menu.append($('<div class="dropdown-menu">')
+                        .append($('<a class="dropdown-item" onclick="fillModal(' + user.id + ')">').text('Редактировать'))
+                        .append($('<a class="dropdown-item" onclick="showAllUsers()">').text('Показать всех пользователей'))
+                        .append($('<a class="dropdown-item" onclick="openModal()">').text('Создать пользователя'))
+                        .append($('<div class="dropdown-divider">'))
+                        .append($('<a class="dropdown-item" href="#" onclick="logout()">').text('Выход')));
+                    $('#roleDiv').prop('hidden', false);
+                } else {
+                    menu.append($('<div class="dropdown-menu">')
+                        .append($('<a class="dropdown-item" onclick="fillModal(' + user.id + ')"><i class="fa fa-pencil fa-fw"></i>').text('Редактировать'))
+                        .append($('<div class="dropdown-divider">'))
+                        .append($('<a class="dropdown-item" href="#" onclick="logout()">').text('Выход')));
+                }
+
+            }
+        })
+    })
+</script>
+
+</body>
+</html>

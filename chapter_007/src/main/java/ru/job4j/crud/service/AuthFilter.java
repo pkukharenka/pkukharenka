@@ -17,6 +17,7 @@ import java.io.IOException;
  * @author Pyotr Kukharenka
  * @since 03.03.2018
  */
+
 @WebFilter("*")
 public class AuthFilter implements Filter {
 
@@ -30,7 +31,7 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
-        if (request.getRequestURI().contains("/login")) {
+        if (request.getRequestURI().contains("/login") || request.getRequestURI().contains("/resources")) {
             chain.doFilter(req, resp);
         } else {
             HttpSession session = request.getSession();

@@ -1,0 +1,56 @@
+#loginBody {
+    background-image: url('/resources/images/bird.jpg');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+
+#mainBody {
+    background-image: url('/resources/images/pale.png');
+
+}
+
+#logo {
+    color: #f8d7da;
+    //font-family: 'Times New Roman', Times, serif;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 28px;
+    height: 60px;
+    width: 200px;
+}
+
+.nav.nav-tabs {
+    background: #26292E;
+    height: 60px;
+    float: right;
+}
+
+.sticky-wrapper {
+    background: #26292E;
+    height: 59px;
+}
+
+.modal-header {
+    background-color: #26292E;
+}
+
+.modal-body {
+    background-image: url('/resources/images/pale.png');
+}
+
+.modal-title {
+    color: #f8d7da;
+}
+
+.modal {
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    width: 400px;
+    max-width: 100%;
+}
+
+#labelError {
+    color: red;
+    font-size: small;
+}

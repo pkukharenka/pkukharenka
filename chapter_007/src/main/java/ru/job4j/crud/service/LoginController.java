@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -28,31 +30,42 @@ public class LoginController extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
     private final UserStore userStore = new UserStore();
-    private final RoleStore roleStore = new RoleStore();
     private final Settings settings = Settings.getInstance();
     private final DbConnect connect = DbConnect.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(this.settings.property("page.login")).forward(req, resp);
-    }
+        resp.setContentType("text/html");
+        try (PrintWriter pw = new PrintWriter(resp.getOutputStream());
+             InputStream is = req.getServletContext().getResourceAsStream(this.settings.property("page.login"));
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+            br.lines().forEach(pw::println);
+            pw.flush();
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
+        String result;
         Optional<User> validUser = this.checkUser(login, password);
         if (validUser.isPresent()) {
             LOG.info("Success login by {}", validUser.get().getLogin());
             HttpSession session = req.getSession();
             session.setAttribute("owner", validUser.get());
-            req.setAttribute("users", this.userStore.findAll());
-            req.setAttribute("roles", this.roleStore.findAll());
-            req.getRequestDispatcher(this.settings.property("page.main")).forward(req, resp);
+            result = "OK";
         } else {
             LOG.info("Try auth with login - {}, password - {}", login, password);
-            req.setAttribute("error", "Invalid login or password");
-            req.getRequestDispatcher(this.settings.property("page.login")).forward(req, resp);
+            result = "ERROR";
+        }
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(resp.getOutputStream(), "UTF-8"))) {
+            pw.print(result);
+            pw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -66,4 +79,5 @@ public class LoginController extends HttpServlet {
                 filter(user -> user.getLogin().equals(login) && user.getPassword().equals(password)).
                 findAny();
     }
+
 }

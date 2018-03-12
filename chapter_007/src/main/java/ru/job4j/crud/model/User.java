@@ -18,8 +18,13 @@ public class User {
     private String email;
     private LocalDate createDate;
     private Role role;
+    private Country country;
+    private City city;
 
-    public User(int id, String name, String login, String password, String email, LocalDate createDate, Role role) {
+    public User() {
+    }
+
+    public User(int id, String name, String login, String password, String email, LocalDate createDate, Role role, Country country, City city) {
         this.id = id;
         this.name = name;
         this.login = login;
@@ -27,34 +32,11 @@ public class User {
         this.email = email;
         this.createDate = createDate;
         this.role = role;
+        this.country = country;
+        this.city = city;
     }
 
     public User(String name, String login, String password, String email, Role role) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
-
-    public User(int id, String name, String login, String email, LocalDate createDate) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.createDate = createDate;
-    }
-
-    public User(int id, String name, String login, String email, Role role) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.role = role;
-    }
-
-    public User(int id, String name, String login, String password, String email, Role role) {
-        this.id = id;
         this.name = name;
         this.login = login;
         this.password = password;
@@ -66,32 +48,72 @@ public class User {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLogin() {
         return login;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDate getCreateDate() {
-        return createDate;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
     public Role getRole() {
         return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override
@@ -122,5 +144,18 @@ public class User {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", login='" + login + '\''
+                + ", password='" + password + '\''
+                + ", email='" + email + '\''
+                + ", createDate=" + createDate
+                + ", role=" + role
+                + ", country=" + country
+                + ", city=" + city
+                + '}';
+    }
 }
