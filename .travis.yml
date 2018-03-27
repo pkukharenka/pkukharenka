@@ -4,9 +4,17 @@ language: java
 sudo: false
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo
-# Здесь используется сторонни сервис https://codecov.io/
+# Здесь используется сторонний сервис https://codecov.io/
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+# запуск базы PostrgresSQL
+services:
+  - postgresql
+
+# создание базы данных с именем пользователя postgres и пустым паролем
+  before_script:
+    - psql -c 'create database travis_ci_test;' -U postgres
 
 # Отправлять уведомление на почту youremail@smtp.ru (Изменить на свою) если сборка упала
 notifications:

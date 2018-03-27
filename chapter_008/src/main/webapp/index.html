@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div id="itemList">
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="descArea">Новая задача</label>
+                <textarea class="form-control" id="descArea" rows="2" placeholder="Введите описание задачи"></textarea>
+            </div>
+            <div class="input-group">
+                <input type="button" class="btn btn-primary" value="Добавить задачу" onclick="add()">
+            </div>
+            <br>
+            <div class="input-group row">
+                    <div class="col-sm-2">
+                        <input type="button" id="showBtn" class="btn btn-primary" value="Задачи">
+                    </div>
+                    <label for="showing" class="col-sm-4 col-form-label">Только активные:</label>
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="showing" class="form-check-input">
+
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/app.js?ver=1"></script>
+</body>
+</html>
