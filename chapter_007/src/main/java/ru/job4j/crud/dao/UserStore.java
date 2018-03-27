@@ -40,21 +40,21 @@ public class UserStore implements Store<User> {
              Statement st = cn.createStatement();
              ResultSet rs = st.executeQuery("SELECT * "
                      + "FROM users AS u LEFT JOIN role AS r ON u.role_id = r.id "
-                     + "  LEFT JOIN country AS co ON u.coutry_id = co.id "
+                     + "  LEFT JOIN country AS co ON u.country_id = co.id "
                      + "  LEFT JOIN city AS ci ON u.city_id = ci.id "
                      + "ORDER BY u.id")) {
             while (rs.next()) {
-                users.add(new User(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("login"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        LocalDate.parse(rs.getString("create_date")),
-                        new Role(rs.getInt("role_id"), rs.getString("type")),
-                        new Country(rs.getInt("country_id"), rs.getString("country_name")),
-                        new City(rs.getInt("city_id"), rs.getString("city_name"))
-                ));
+                final User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setLogin(rs.getString("login"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setCreateDate(LocalDate.parse(rs.getString("create_date")));
+                user.setRole(new Role(rs.getInt("role_id"), rs.getString("type")));
+                user.setCountry(new Country(rs.getInt("country_id"), rs.getString("country_name")));
+                user.setCity(new City(rs.getInt("city_id"), rs.getString("city_name")));
+                users.add(user);
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -73,7 +73,7 @@ public class UserStore implements Store<User> {
         int newUserId = 0;
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement(
-                     "INSERT INTO users (name, login, email, create_date, password, role_id, coutry_id, city_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                     "INSERT INTO users (name, login, email, create_date, password, role_id, country_id, city_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                      Statement.RETURN_GENERATED_KEYS)
         ) {
             pst.setString(1, user.getName());
@@ -106,7 +106,7 @@ public class UserStore implements Store<User> {
     public int update(User user) {
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("UPDATE users SET name=?, login=?, email=?, "
-                     + "password=?, role_id=?, coutry_id=?, city_id=? WHERE id=?")) {
+                     + "password=?, role_id=?, country_id=?, city_id=? WHERE id=?")) {
             pst.setString(1, user.getName());
             pst.setString(2, user.getLogin());
             pst.setString(3, user.getEmail());
@@ -152,24 +152,23 @@ public class UserStore implements Store<User> {
         try (Connection cn = this.dataSource.getConnection();
              PreparedStatement pst = cn.prepareStatement("SELECT *"
                      + "FROM users AS u LEFT JOIN role AS r ON u.role_id = r.id"
-                     + "  LEFT JOIN country AS co ON u.coutry_id = co.id"
+                     + "  LEFT JOIN country AS co ON u.country_id = co.id"
                      + "  LEFT JOIN city AS ci ON u.city_id = ci.id "
                      + "WHERE u.id = ?")) {
             pst.setInt(1, id);
             pst.executeQuery();
             try (ResultSet rs = pst.getResultSet()) {
                 if (rs.next()) {
-                    user = new User(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getString("login"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            LocalDate.parse(rs.getString("create_date")),
-                            new Role(rs.getInt("role_id"), rs.getString("type")),
-                            new Country(rs.getInt("country_id"), rs.getString("country_name")),
-                            new City(rs.getInt("city_id"), rs.getString("city_name"))
-                    );
+                    user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setName(rs.getString("name"));
+                    user.setLogin(rs.getString("login"));
+                    user.setPassword(rs.getString("password"));
+                    user.setEmail(rs.getString("email"));
+                    user.setCreateDate(LocalDate.parse(rs.getString("create_date")));
+                    user.setRole(new Role(rs.getInt("role_id"), rs.getString("type")));
+                    user.setCountry(new Country(rs.getInt("country_id"), rs.getString("country_name")));
+                    user.setCity(new City(rs.getInt("city_id"), rs.getString("city_name")));
                 }
             }
         } catch (SQLException e) {

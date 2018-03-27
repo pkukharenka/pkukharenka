@@ -43,7 +43,8 @@ public class LoginController extends HttpServlet {
             pw.flush();
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
-        }    }
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

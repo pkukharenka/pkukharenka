@@ -1,3 +1,18 @@
+function ajax(url, data, func) {
+    $.ajax(url, {
+        method: 'post',
+        dataType: 'json',
+        data: data,
+        complete: function (data) {
+            func(data)
+        },
+        error: function (a, s, d) {
+            console.log("ajax - error")
+        }
+    });
+}
+
+
 /**
  * При закрытии модального окна очищаются все
  * поля. При открытии модального окна фокус устанавливается
@@ -19,24 +34,22 @@ $('#newModal').on('hide.bs.modal', function () {
  * @param id - id пользователя для обновления
  */
 function fillModal(id) {
-    $.ajax('./json', {
-        method: 'post',
-        dataType: 'json',
-        data: {
-            'command': 'fillUpdateForm',
-            'id': id
-        },
-        complete: function (data) {
-            const user = JSON.parse(data.responseText);
-            $('#id').val(user.id);
-            $('#nameInput').val(user.name);
-            $('#loginInput').val(user.login);
-            $('#passInput').val(user.password);
-            $('#emailInput').val(user.email);
-            openModal(user);
-        }
+    ajax('./json', {
+        'command': 'fillUpdateForm',
+        'id': id,
+    }, function (data) {
+        console.log(data.responseText);
+        const user = JSON.parse(data.responseText);
+        $('#id').val(user.id);
+        $('#nameInput').val(user.name);
+        $('#loginInput').val(user.login);
+        $('#passInput').val(user.password);
+        $('#emailInput').val(user.email);
+        openModal(user);
     });
 }
+
+
 /**
  * Открытие модального окна. Установка кнопок в зависимости
  * от выполняемого действия:

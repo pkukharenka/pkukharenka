@@ -24,26 +24,6 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String login, String password, String email, LocalDate createDate, Role role, Country country, City city) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.createDate = createDate;
-        this.role = role;
-        this.country = country;
-        this.city = city;
-    }
-
-    public User(String name, String login, String password, String email, Role role) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
-
     public int getId() {
         return id;
     }

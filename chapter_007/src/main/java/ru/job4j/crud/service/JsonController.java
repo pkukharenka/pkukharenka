@@ -14,6 +14,7 @@ import ru.job4j.crud.model.Country;
 import ru.job4j.crud.model.Role;
 import ru.job4j.crud.model.User;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,13 +60,9 @@ public class JsonController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) {
         resp.setContentType("application/json");
         LOG.info(req.getParameter("command"));
-        String result = this.initDispatch(req).findCommand(req.getParameter("command"));
+        final String result = this.initDispatch(req).findCommand(req.getParameter("command"));
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(resp.getOutputStream(), "UTF-8"))) {
             pw.print(result);
             pw.flush();
@@ -96,9 +93,7 @@ public class JsonController extends HttpServlet {
     private Function<String, String> fillCity(HttpServletRequest req) {
         return json -> {
             String result = "";
-            String test = req.getParameter("id");
-            int id = Integer.parseInt(test);
-            List<City> cities = this.cityStore.findCitiesByCountryId(id);
+            List<City> cities = this.cityStore.findCitiesByCountryId(Integer.parseInt(req.getParameter("id")));
             try {
                 result = this.mapper.writeValueAsString(cities);
             } catch (JsonProcessingException e) {
@@ -140,6 +135,7 @@ public class JsonController extends HttpServlet {
             final User user = this.userStore.get(Integer.parseInt(req.getParameter("id")));
             try {
                 result = mapper.writeValueAsString(user);
+                LOG.info(result);
             } catch (JsonProcessingException e) {
                 LOG.error(e.getMessage(), e);
             }
