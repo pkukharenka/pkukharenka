@@ -14,7 +14,8 @@ services:
 
 # создание базы данных с именем пользователя postgres и пустым паролем
   before_script:
-    - psql -c 'create database travis_ci_test;' -U postgres
+    - psql -c 'create database todolist;' -U postgres
+    - psql -c 'create database car;' -U postgres
 
 # Отправлять уведомление на почту youremail@smtp.ru (Изменить на свою) если сборка упала
 notifications:

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Country DAO
+ * Country dao
  *
  * @author Pyotr Kukharenka
  * @since 08.03.2018

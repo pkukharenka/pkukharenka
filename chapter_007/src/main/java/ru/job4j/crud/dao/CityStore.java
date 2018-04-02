@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * City DAO
+ * City dao
  *
  * @author Pyotr Kukharenka
  * @since 08.03.2018
