@@ -25,7 +25,7 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "ID_GENERATOR")
     private long id;
 
     @Column(name = "USER_NAME")

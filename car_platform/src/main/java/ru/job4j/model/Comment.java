@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import ru.job4j.util.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,7 +26,7 @@ import java.time.LocalDate;
 public class Comment implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
     private long id;
 
     @Lob

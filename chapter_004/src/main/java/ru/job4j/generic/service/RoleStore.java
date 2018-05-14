@@ -1,8 +1,7 @@
 package ru.job4j.generic.service;
 
 import ru.job4j.generic.SimpleArray;
-import ru.job4j.generic.models.Base;
-import ru.job4j.generic.models.Role;
+import ru.job4j.generic.model.Role;
 
 /**
  * Хранилище объектов типа Role.

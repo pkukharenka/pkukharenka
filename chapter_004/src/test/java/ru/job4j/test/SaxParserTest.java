@@ -1,6 +1,8 @@
 package ru.job4j.test;
 
 import org.junit.Test;
+import ru.job4j.test.exchange.ExchangeGlass;
+import ru.job4j.test.exchange.model.Order;
 
 import java.util.TreeMap;
 
@@ -12,7 +14,7 @@ public class SaxParserTest {
 
     @Test
     public void whenAddOrderInBidAndVolumeMoreThanAskThenAskRemoveAndVolumeDecrease() {
-        Analyse a = new Analyse();
+        ExchangeGlass a = new ExchangeGlass();
         TreeMap<Integer, Integer> bid = new TreeMap<>();
         TreeMap<Integer, Integer> ask = new TreeMap<>();
         ask.put(9970, 20);
@@ -24,7 +26,7 @@ public class SaxParserTest {
 
     @Test
     public void whenAddOrderInAskAndVolumeMoreThanBidThenBidRemoveAndAskVolumeDecrease() {
-        Analyse a = new Analyse();
+        ExchangeGlass a = new ExchangeGlass();
         TreeMap<Integer, Integer> bid = new TreeMap<>();
         TreeMap<Integer, Integer> ask = new TreeMap<>();
         bid.put(10020, 30);
@@ -36,7 +38,7 @@ public class SaxParserTest {
 
     @Test
     public void whenAddOrderInBidAndVolumeLessThanAskThenAskVolumeDecrease() {
-        Analyse a = new Analyse();
+        ExchangeGlass a = new ExchangeGlass();
         TreeMap<Integer, Integer> bid = new TreeMap<>();
         TreeMap<Integer, Integer> ask = new TreeMap<>();
         ask.put(9970, 70);
@@ -48,7 +50,7 @@ public class SaxParserTest {
 
     @Test
     public void whenAddOrderInBidAndVolumeEqualsAskThenAskRemove() {
-        Analyse a = new Analyse();
+        ExchangeGlass a = new ExchangeGlass();
         TreeMap<Integer, Integer> bid = new TreeMap<>();
         TreeMap<Integer, Integer> ask = new TreeMap<>();
         ask.put(9830, 70);

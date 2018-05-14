@@ -2,8 +2,8 @@ package ru.job4j.generic.service;
 
 import org.junit.Test;
 import ru.job4j.generic.SimpleArray;
-import ru.job4j.generic.models.Role;
-import ru.job4j.generic.models.User;
+import ru.job4j.generic.model.Role;
+import ru.job4j.generic.model.User;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;

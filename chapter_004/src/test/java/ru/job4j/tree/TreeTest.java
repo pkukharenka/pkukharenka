@@ -1,6 +1,7 @@
 package ru.job4j.tree;
 
 import org.junit.Test;
+import ru.job4j.tree.exception.InvalidRootException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

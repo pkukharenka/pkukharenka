@@ -2,6 +2,7 @@ package ru.job4j.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.job4j.util.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,15 +21,14 @@ import java.io.Serializable;
 public class CarImage implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
     private long id;
 
     @Column(name = "IMAGE_NAME")
     private String imageName;
 
-    @Lob
     @Column(name = "IMAGE")
-    private byte[] image;
+    private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAR_ID", nullable = false)

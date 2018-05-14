@@ -3,6 +3,7 @@ package ru.job4j.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.job4j.util.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,8 +23,8 @@ import java.io.Serializable;
 public class Model implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    private Long id;
 
     @Column(name = "MODEL_NAME")
     private String modelName;
@@ -35,7 +36,7 @@ public class Model implements Serializable {
     private Model parent;
 
 
-    public Model(long id) {
+    public Model(Long id) {
         this.id = id;
     }
 }

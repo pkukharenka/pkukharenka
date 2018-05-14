@@ -11,6 +11,7 @@
         <property name="use_sql_comments">true</property>
         <property name="hibernate.generate_statistics">true</property>
 
+        <mapping package="ru.job4j.model"/>
         <mapping class="ru.job4j.model.Car"/>
         <mapping class="ru.job4j.model.CarImage"/>
         <mapping class="ru.job4j.model.Comment"/>

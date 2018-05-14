@@ -49,11 +49,8 @@ public class Perfomance {
     }
 
     public static void main(String[] args) {
-        //Коллекция ArrayList.
         List<String> array = new ArrayList<>();
-        //Коллекция LinkedList.
         List<String> linked = new LinkedList<>();
-        //Коллекция TreeSet.
         Set<String> set = new TreeSet<>();
 
         Perfomance perf = new Perfomance();

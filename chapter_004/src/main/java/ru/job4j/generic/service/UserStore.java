@@ -1,7 +1,7 @@
 package ru.job4j.generic.service;
 
 import ru.job4j.generic.SimpleArray;
-import ru.job4j.generic.models.User;
+import ru.job4j.generic.model.User;
 
 /**
  * Хранилище объектов типа User.

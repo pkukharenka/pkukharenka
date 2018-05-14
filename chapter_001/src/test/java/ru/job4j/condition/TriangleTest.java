@@ -1,6 +1,8 @@
 package ru.job4j.condition;
 
 import org.junit.Test;
+import ru.job4j.condition.triangle.Point;
+import ru.job4j.condition.triangle.Triangle;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.number.IsCloseTo.closeTo;

@@ -2,6 +2,7 @@ package ru.job4j.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.job4j.util.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 public class Role implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
     private long id;
 
     @Column(name = "ROLE_TYPE")

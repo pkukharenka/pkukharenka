@@ -42,7 +42,7 @@ public class EvenIterator implements Iterator<Integer> {
 
     /**
      * Метод возвращает либо очередное четное значение, либо
-     * выкидывает Exception о его отсутствии
+     * выкидывает exception о его отсутствии
      *
      * @return - очередной четный элемент.
      * @throws NoSuchElementException - выбрасывается если больше четных элементов

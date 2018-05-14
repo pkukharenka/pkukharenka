@@ -82,7 +82,7 @@ public class ArrayContainer<E> implements ListContainer<E> {
     /**
      * Метод возвращает элемент контейнера по указанному
      * индеку. Если индекс больше текущего метод выбрасывает
-     * Exception.
+     * exception.
      *
      * @param index - индекс ячейки контейнера.
      * @return - значение элемента по указанному индеку.

@@ -1,6 +1,5 @@
 package ru.job4j.calculator;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -64,7 +63,7 @@ public class CalculatorTest {
     }
 
     /**
-     * Test for div (4/0=Exception)
+     * Test for div (4/0=exception)
      */
     @Test(expected = ArithmeticException.class)
     public void whenFourDivZeroThenThrowException() {

@@ -1,6 +1,6 @@
 package ru.job4j.generic.service;
 
-import ru.job4j.generic.models.Base;
+import ru.job4j.generic.model.Base;
 
 /**
  * Интерфейс хранилища.

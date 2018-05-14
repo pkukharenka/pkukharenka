@@ -143,7 +143,7 @@ public class LinkedContainer<E> implements ListContainer<E> {
 
     /**
      * Проверка валидности требуемого индекса. В случае отсуствия
-     * индекса выбрасываем Exception.
+     * индекса выбрасываем exception.
      *
      * @param index - индекс для проверки
      * @throws IndexOutOfBoundsException - выбрасывается если индекс не в диапозоне

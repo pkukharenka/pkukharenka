@@ -7,13 +7,17 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import ru.job4j.util.Constants;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Объявление о продаже машины.
@@ -29,19 +33,19 @@ import java.util.List;
 public class Car implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = Constants.ID_GENERATOR)
+    private Long id;
 
     @Column(name = "PRICE")
     private BigDecimal price;
 
     @Column(name = "CAR_CREATED", updatable = false)
     @CreationTimestamp
-    private LocalDate carCreate;
+    private Instant carCreate;
 
     @Generated(GenerationTime.ALWAYS)
     @Column(name = "CAR_MODIFIED")
-    private LocalDate carLastModified;
+    private Instant carLastModified;
 
     @Column(name = "CAR_DESC")
     private String description;
@@ -69,10 +73,10 @@ public class Car implements Serializable {
     private Model model;
 
     @OneToMany(mappedBy = "car")
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "car")
-    private List<CarImage> images = new ArrayList<>();
+    private Set<CarImage> images = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(

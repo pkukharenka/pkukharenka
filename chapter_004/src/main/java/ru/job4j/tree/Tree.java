@@ -1,5 +1,7 @@
 package ru.job4j.tree;
 
+import ru.job4j.tree.exception.InvalidRootException;
+
 import java.util.*;
 
 /**
