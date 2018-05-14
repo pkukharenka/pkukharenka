@@ -1,4 +1,4 @@
-package ru.job4j.monitore;
+package ru.job4j.storage;
 
 /**
  * Класс User.

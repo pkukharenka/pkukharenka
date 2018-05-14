@@ -1,6 +1,8 @@
 package ru.job4j.monitore;
 
 import org.junit.Test;
+import ru.job4j.storage.User;
+import ru.job4j.storage.UserStorage;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;

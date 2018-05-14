@@ -12,11 +12,11 @@ import java.util.Scanner;
  * @since 31.01.2018
  */
 
-public class Handler extends Thread {
+public class HandlerThread extends Thread {
     /**
      * Логгер
      */
-    private static final Logger LOG = LoggerFactory.getLogger(Handler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HandlerThread.class);
     /**
      * Сканер
      */
@@ -31,7 +31,7 @@ public class Handler extends Thread {
      *
      * @param elevator - лифт
      */
-    public Handler(Elevator elevator) {
+    public HandlerThread(Elevator elevator) {
         this.elevator = elevator;
     }
 

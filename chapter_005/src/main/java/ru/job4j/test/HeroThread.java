@@ -1,6 +1,8 @@
 package ru.job4j.test;
 
 
+import ru.job4j.test.model.Model;
+
 /**
  * Класс осуществляющий пользовательское движение
  * героя

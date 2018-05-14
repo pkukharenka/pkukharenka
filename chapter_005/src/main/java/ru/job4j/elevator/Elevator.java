@@ -143,7 +143,7 @@ public class Elevator {
      */
     public static void main(String[] args) {
         Elevator elevator = new Elevator(20, 3, 3, 3, 5000);
-        new Mover(elevator).start();
-        new Handler(elevator).start();
+        new MoverThread(elevator).start();
+        new HandlerThread(elevator).start();
     }
 }

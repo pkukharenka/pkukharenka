@@ -8,7 +8,7 @@ package ru.job4j.thread;
  * @since 03.01.2018
  */
 
-public class Counter {
+public class WordSpacesCounter {
     /**
      * Текст для обработки.
      */
@@ -19,7 +19,7 @@ public class Counter {
      *
      * @param text - текст для обработки.
      */
-    public Counter(String text) {
+    public WordSpacesCounter(String text) {
         this.text = text;
     }
 
@@ -82,10 +82,10 @@ public class Counter {
      * @param args - входящие аргументы
      */
     public static void main(String[] args) {
-        Counter counter = new Counter("Thank you for submitting your request.");
+        WordSpacesCounter wordSpacesCounter = new WordSpacesCounter("Thank you for submitting your request.");
         System.out.println("Start");
-        Thread tr1 = counter.calcSpace();
-        Thread tr2 = counter.calcWord();
+        Thread tr1 = wordSpacesCounter.calcSpace();
+        Thread tr2 = wordSpacesCounter.calcWord();
         tr1.start();
         tr2.start();
         try {

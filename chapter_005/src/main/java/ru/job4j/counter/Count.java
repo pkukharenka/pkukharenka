@@ -1,4 +1,4 @@
-package ru.job4j.monitore;
+package ru.job4j.counter;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;

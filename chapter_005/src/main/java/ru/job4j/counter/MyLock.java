@@ -1,4 +1,4 @@
-package ru.job4j.monitore;
+package ru.job4j.counter;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

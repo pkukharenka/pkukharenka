@@ -1,5 +1,7 @@
 package ru.job4j.test;
 
+import ru.job4j.test.model.Model;
+
 import java.util.*;
 import java.util.function.Function;
 

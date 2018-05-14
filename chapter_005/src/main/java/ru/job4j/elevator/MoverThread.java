@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
  * @since 31.01.2018
  */
 
-public class Mover extends Thread {
+public class MoverThread extends Thread {
     /**
      * Логгер
      */
-    private static final Logger LOG = LoggerFactory.getLogger(Mover.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MoverThread.class);
     /**
      * Лифт
      */
@@ -25,7 +25,7 @@ public class Mover extends Thread {
      *
      * @param elevator - лифт
      */
-    public Mover(Elevator elevator) {
+    public MoverThread(Elevator elevator) {
         this.elevator = elevator;
     }
 

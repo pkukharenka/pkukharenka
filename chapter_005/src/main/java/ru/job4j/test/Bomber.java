@@ -1,6 +1,7 @@
 package ru.job4j.test;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import ru.job4j.test.model.Dest;
+import ru.job4j.test.model.Model;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

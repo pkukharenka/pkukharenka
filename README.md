@@ -106,3 +106,40 @@
     + [7.2. Лягушка](./chapter_004/src/main/java/ru/job4j/test/Frog.java)
     + [7.3. Посимвольное сравнение строк](./chapter_004/src/main/java/ru/job4j/test/WordCheck.java)
 
+## Часть 005. Многопоточность.
+
++ ##### 1. Задачи части 005.
+
+    + [1.1. Реализовать потокобезопасный счетчик](./chapter_005/src/main/java/ru/job4j/counter/Count.java)
+    см. также [Собственный механизм блокировок](./chapter_005/src/main/java/ru/job4j/counter/MyLock.java)
+    + [1.2. Реализовать многопоточный счетчик слов и пробелов](./chapter_005/src/main/java/ru/job4j/thread/WordSpacesCounter.java)
+    + [1.3. Реализовать механизм программной остановки потоков](./chapter_005/src/main/java/ru/job4j/thread/Interrupt.java)
+    + [1.4. Реализовать потокобезопасный динамический контейнер](./chapter_005/src/main/java/ru/job4j/storage)
+    + [1.5. Реализовать шаблон Producer-Consumer](./chapter_005/src/main/java/ru/job4j/monitore/Store.java)
+    + [1.6. Реализовать ThreadPool](./chapter_005/src/main/java/ru/job4j/monitore/ThreadPool.java)
+    + [1.7. Многопоточный поиск текста в файле](./chapter_005/src/main/java/ru/job4j/monitore/TextSearch.java)
+    + [1.8. Реализовать неблокирующий кеш](./chapter_005/src/main/java/ru/job4j/nonblocking)
+
++ ##### 2. Контрольные задания по теме Многопоточность.
+
+    + [2.1. API игры бомбермен](./chapter_005/src/main/java/ru/job4j/test)
+    + [2.2. Эмулятор лифта](./chapter_005/src/main/java/ru/job4j/elevator)
+
+## Часть 006. SQL, JDBC.
+
++ ##### 1. Задачи части 006.
+
+    + [1.1. XML XSLT JDBC Оптимизация](./chapter_006/src/main/java/ru/job4j/jdbc)
+
++ ##### 2. Контрольные задания по теме SQL, JDBC.
+
+    + [2.1. Парсер вакансий sql.ru](./chapter_006/src/main/java/ru/job4j/test)
+
+## Часть 007. Servlet.
+
++ ##### 1. Задачи части 007.
+    + [1.1. Реализовать приложения для работы с пользователем](./chapter_007/src/main/java/ru/job4j/crud)
+
+    ![Login page](./chapter_007/src/main/resources/images/Main.png)
+    
+    ![Main page](./chapter_007/src/main/resources/images/Main1.png)

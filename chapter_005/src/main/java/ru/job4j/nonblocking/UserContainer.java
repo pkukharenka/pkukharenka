@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 16.02.2018
  */
 
-public class Cash {
+public class UserContainer {
     /**
      * Структура для хранения
      */
@@ -19,7 +19,7 @@ public class Cash {
     /**
      * Инициализация хранилища.
      */
-    public Cash() {
+    public UserContainer() {
         this.cash = new ConcurrentHashMap<>(100);
     }
 
