@@ -3,14 +3,14 @@ language: java
 # используем режим обычного пользователя для сборки проекта.
 sudo: false
 
-# запуск базы PostrgresSQL
+# запуск базы PostrgreSQL
 services:
   - postgresql
 
 # создание базы данных с именем пользователя postgres и пустым паролем
-  before_script:
-    - psql -c 'create database todolist;' -U postgres
-    - psql -c 'create database car;' -U postgres
+before_script:
+  - psql -c 'create database todolist;' -U postgres
+  - psql -c 'create database car;' -U postgres
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo
 # Здесь используется сторонний сервис https://codecov.io/
