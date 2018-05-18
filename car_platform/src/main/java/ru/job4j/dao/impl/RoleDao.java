@@ -1,4 +1,4 @@
-package ru.job4j.dao.Impl;
+package ru.job4j.dao.impl;
 
 import ru.job4j.dao.GenericDao;
 import ru.job4j.model.Role;

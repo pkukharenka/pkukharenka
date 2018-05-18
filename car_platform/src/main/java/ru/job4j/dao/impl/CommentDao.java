@@ -1,4 +1,4 @@
-package ru.job4j.dao.Impl;
+package ru.job4j.dao.impl;
 
 
 import lombok.extern.slf4j.Slf4j;

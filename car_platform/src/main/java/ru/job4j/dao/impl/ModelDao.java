@@ -1,4 +1,4 @@
-package ru.job4j.dao.Impl;
+package ru.job4j.dao.impl;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +7,7 @@ import ru.job4j.dao.GenericDao;
 import ru.job4j.model.Model;
 import ru.job4j.util.HibernateUtil;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
-import java.util.Set;
 
 /**
  * TODO comments

@@ -2,7 +2,7 @@ package ru.job4j.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import ru.job4j.dao.Impl.CarDao;
+import ru.job4j.dao.impl.CarDao;
 import ru.job4j.model.Car;
 import ru.job4j.model.Model;
 import ru.job4j.model.User;
